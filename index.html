@@ -178,6 +178,51 @@
             };
 
             const cldData = [[[1,420,220,0,"تقاضای برق (اوج مصرف)",0],[2,720,220,0,"ظرفیت تولید برق",1],[3,560,360,0,"ناترازی برق (شکاف عرضه/تقاضا)",2],[4,230,410,0,"قیمت/تعرفه برق",3],[5,870,120,0,"سرمایه‌گذاری سالیانه در ظرفیت جدید",4],[6,1020,220,0,"راندمان و بهره‌وری انرژی",5],[7,720,420,0,"یارانه انرژی",6],[8,420,470,0,"مصرف سرمایشی (گرمای تابستان)",7],[9,110,320,0,"مصرف خانگی",8],[10,920,420,0,"تلفات شبکه",9],[11,210,120,0,"جمعیت و تعداد مشترکان",10],[12,220,560,0,"برنامه‌های مدیریت مصرف",11],[13,870,310,0,"تولید برق آبی (وابسته به منابع آب)",12],[14,1070,120,0,"واردات برق",13],[15,1270,220,0,"تحریم‌ها و محدودیت تأمین مالی/فناوری",14],[16,430,580,0,"دما و تغییرات اقلیمی",15]],[[1,3,0.1,1],[2,3,0,-1],[3,5,0.1,0.9],[5,2,0.2,0.8],[4,1,0,-0.8],[7,4,-0.1,-1],[4,7,-0.1,-1],[6,1,0.1,-0.7],[3,12,0,0.6],[12,1,0,-0.6],[16,8,0,0.7],[8,1,0,0.6],[9,1,0,0.4],[11,9,0,0.6],[10,1,0.2,0.5],[2,10,-0.2,-0.5],[13,2,0.1,0.9],[16,13,0.2,-0.7],[15,5,0,-0.8],[14,2,0.1,0.7],[5,6,0.3,0.6],[4,11,-0.1,-0.5],[3,14,0.2,1],[14,15,0,0.8],[1,16,0.1,0.6]],[[700,40,"نمودار علی-معلولی عدم تعادل برق ایران (PESTLE)"]],17];
+
+            const supplyDemandCtx = document.getElementById('supplyDemandChart').getContext('2d');
+            new Chart(supplyDemandCtx, {
+                type: 'line',
+                data: {
+                    labels: data.supplyDemand.labels,
+                    datasets: [
+                        {
+                            label: 'تقاضای برق (مگاوات)',
+                            data: data.supplyDemand.demand,
+                            borderColor: 'rgb(220, 38, 38)',
+                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'عرضه برق (مگاوات)',
+                            data: data.supplyDemand.supply,
+                            borderColor: 'rgb(2, 132, 199)',
+                            backgroundColor: 'rgba(2, 132, 199, 0.1)',
+                            fill: false,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: 'روند شکاف عرضه و تقاضای برق در ایران', font: { size: 16, family: 'Vazirmatn' } },
+                        tooltip: { bodyFont: { family: 'Vazirmatn' }, titleFont: { family: 'Vazirmatn' } }
+                    },
+                    scales: { y: { title: { display: true, text: 'مگاوات' } } }
+                }
+            });
+
+            const energyMixCtx = document.getElementById('energyMixChart').getContext('2d');
+            new Chart(energyMixCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.energyMix.labels,
+                    datasets: [{
+                        label: 'سهم در تولید برق',
+                        data: data.energyMix.data,
+                        backgroundColor: ['#0d9488', '#f97316', '#3b82f6', '#8b5cf6', '#64748b'],
                     }]
                 },
                 options: {
@@ -190,7 +235,6 @@
                     }
                 }
             });
-
             const supplyTab = document.getElementById('supply-tab');
             const demandTab = document.getElementById('demand-tab');
             const driversContent = document.getElementById('drivers-content');
