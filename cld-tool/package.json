@@ -1,6 +1,7 @@
 {
   "name": "cld-tool",
   "private": true,
+  "homepage": ".",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -10,7 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/cytoscape": "^3.21.9",
+    "cytoscape": "^3.32.0",
     "react": "^19.1.0",
+    "react-cytoscapejs": "^2.0.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {

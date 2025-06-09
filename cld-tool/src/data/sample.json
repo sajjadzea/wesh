@@ -1,0 +1,7 @@
+{
+  "elements": [
+    { "data": { "id": "n1", "label": "Node 1", "description": "First node", "impact": "high", "resources": "https://example.com" }, "position": { "x": 100, "y": 100 } },
+    { "data": { "id": "n2", "label": "Node 2", "description": "Second node", "impact": "low", "resources": "https://example.org" }, "position": { "x": 300, "y": 200 } },
+    { "data": { "id": "e1", "source": "n1", "target": "n2", "color": "#888" } }
+  ]
+}
