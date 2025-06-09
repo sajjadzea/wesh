@@ -1,61 +1,30 @@
 {
   "nodes": [
-    {
-      "data": {
-        "id": "demand",
-        "label": "تقاضای برق",
-        "description": "افزایش مداوم تقاضای برق در بخش‌های مختلف",
-        "resources": ["https://example.com/demand"]
-      }
-    },
-    {
-      "data": {
-        "id": "supply",
-        "label": "ظرفیت تولید برق",
-        "description": "ظرفیت موجود نیروگاه‌ها برای تأمین برق",
-        "resources": ["https://example.com/supply"]
-      }
-    },
-    {
-      "data": {
-        "id": "gap",
-        "label": "ناترازی برق",
-        "description": "اختلاف بین عرضه و تقاضای برق",
-        "resources": ["https://example.com/gap"]
-      }
-    },
-    {
-      "data": {
-        "id": "investment",
-        "label": "سرمایه‌گذاری",
-        "description": "سرمایه‌گذاری در توسعه نیروگاه‌ها",
-        "resources": ["https://example.com/investment"]
-      }
-    },
-    {
-      "data": {
-        "id": "tariff",
-        "label": "تعرفه برق",
-        "description": "سطح قیمت و یارانه برق",
-        "resources": ["https://example.com/tariff"]
-      }
-    }
+    { "data": { "id": "demand_growth", "label": "رشد تقاضای برق", "description": "افزایش مصرف برق به علت رشد جمعیت، توسعه صنعت و شهرنشینی که موجب فشار بر تقاضا می‌شود.", "resources": ["https://example.com/resource1"] } },
+    { "data": { "id": "supply_capacity", "label": "ظرفیت تولید برق", "description": "توان واقعی نیروگاه‌های کشور برای تأمین برق مورد نیاز.", "resources": [] } },
+    { "data": { "id": "fuel_availability", "label": "دسترسی به سوخت نیروگاهی", "description": "دسترسی به گاز طبیعی و سایر سوخت‌ها که تولید برق را ممکن می‌سازد.", "resources": [] } },
+    { "data": { "id": "network_losses", "label": "تلفات شبکه انتقال و توزیع", "description": "میزان برقی که در مسیر انتقال و توزیع از دست می‌رود.", "resources": [] } },
+    { "data": { "id": "investment", "label": "سرمایه‌گذاری در صنعت برق", "description": "میزان سرمایه‌گذاری انجام‌شده برای افزایش ظرفیت نیروگاه‌ها و زیرساخت.", "resources": [] } },
+    { "data": { "id": "tariff_policy", "label": "سیاست تعرفه‌گذاری برق", "description": "چگونگی تعیین قیمت برق و تاثیر آن بر مصرف و سرمایه‌گذاری.", "resources": [] } },
+    { "data": { "id": "renewable_share", "label": "سهم انرژی‌های تجدیدپذیر", "description": "سهم نیروگاه‌های خورشیدی، بادی و منابع پاک در کل تولید برق.", "resources": [] } },
+    { "data": { "id": "climate_change", "label": "تغییرات اقلیمی و خشکسالی", "description": "کاهش بارندگی، افزایش دما و تأثیر آن بر تولید برق‌آبی و مصرف.", "resources": [] } },
+    { "data": { "id": "import_export", "label": "واردات و صادرات برق", "description": "تعادل برق با کشورهای همسایه به عنوان راهکاری برای جبران کسری یا مازاد.", "resources": [] } },
+    { "data": { "id": "gov_policy", "label": "سیاست‌ها و مقررات دولتی", "description": "تصمیمات کلان، قوانین و مقررات موثر بر تولید و مصرف برق.", "resources": [] } },
+    { "data": { "id": "power_imbalance", "label": "ناترازی عرضه و تقاضای برق", "description": "زمانی که تولید برق پاسخگوی مصرف نیست یا برعکس.", "resources": [] } }
   ],
   "edges": [
-    {
-      "data": { "id": "e1", "source": "demand", "target": "gap", "type": "positive" }
-    },
-    {
-      "data": { "id": "e2", "source": "supply", "target": "gap", "type": "negative" }
-    },
-    {
-      "data": { "id": "e3", "source": "gap", "target": "investment", "type": "positive" }
-    },
-    {
-      "data": { "id": "e4", "source": "investment", "target": "supply", "type": "positive" }
-    },
-    {
-      "data": { "id": "e5", "source": "tariff", "target": "demand", "type": "negative" }
-    }
+    { "data": { "id": "e1", "source": "demand_growth", "target": "power_imbalance", "type": "positive" } },
+    { "data": { "id": "e2", "source": "supply_capacity", "target": "power_imbalance", "type": "negative" } },
+    { "data": { "id": "e3", "source": "fuel_availability", "target": "supply_capacity", "type": "positive" } },
+    { "data": { "id": "e4", "source": "network_losses", "target": "supply_capacity", "type": "negative" } },
+    { "data": { "id": "e5", "source": "investment", "target": "supply_capacity", "type": "positive" } },
+    { "data": { "id": "e6", "source": "tariff_policy", "target": "demand_growth", "type": "negative" } },
+    { "data": { "id": "e7", "source": "tariff_policy", "target": "investment", "type": "positive" } },
+    { "data": { "id": "e8", "source": "renewable_share", "target": "supply_capacity", "type": "positive" } },
+    { "data": { "id": "e9", "source": "climate_change", "target": "supply_capacity", "type": "negative" } },
+    { "data": { "id": "e10", "source": "climate_change", "target": "demand_growth", "type": "positive" } },
+    { "data": { "id": "e11", "source": "import_export", "target": "power_imbalance", "type": "negative" } },
+    { "data": { "id": "e12", "source": "gov_policy", "target": "investment", "type": "positive" } },
+    { "data": { "id": "e13", "source": "gov_policy", "target": "tariff_policy", "type": "positive" } }
   ]
 }
