@@ -5,6 +5,17 @@ function initCausalGraph(dataPath) {
     return;
   }
 
+  const sidebar = document.getElementById('node-info-sidebar');
+  const titleEl = document.getElementById('node-info-title');
+  const descEl = document.getElementById('node-info-desc');
+  const resEl = document.getElementById('node-info-resources');
+  const closeBtn = document.getElementById('node-info-close');
+  if (closeBtn && sidebar) {
+    closeBtn.addEventListener('click', function() {
+      sidebar.classList.add('translate-x-full');
+    });
+  }
+
   const loadingEl = document.createElement('div');
   loadingEl.textContent = 'در حال بارگذاری...';
   loadingEl.className = 'text-center my-4';
@@ -42,8 +53,26 @@ function initCausalGraph(dataPath) {
       });
 
       cy.on('tap', 'node', function(evt) {
+        if (!sidebar) return;
         var d = evt.target.data();
-        alert(d.label + '\n' + d.description + '\n' + (d.resources ? d.resources.join(', ') : ''));
+        if (titleEl) titleEl.textContent = d.label || '';
+        if (descEl) descEl.textContent = d.description || '';
+        if (resEl) {
+          resEl.innerHTML = '';
+          if (d.resources && Array.isArray(d.resources)) {
+            d.resources.forEach(function(url) {
+              var li = document.createElement('li');
+              var a = document.createElement('a');
+              a.href = url;
+              a.textContent = url;
+              a.target = '_blank';
+              a.className = 'text-teal-700 hover:underline';
+              li.appendChild(a);
+              resEl.appendChild(li);
+            });
+          }
+        }
+        sidebar.classList.remove('translate-x-full');
       });
     })
     .catch(function(err) {
