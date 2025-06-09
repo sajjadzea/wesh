@@ -1,7 +1,7 @@
 {
-  "name": "cld-tool",
+  "name": "wesh",
   "version": "1.0.0",
-  "description": "Causal Graph Visualization Tool",
+  "description": "Causal Graph Visualization project",
   "main": "index.js",
   "scripts": {
     "build": "echo 'build step (customize as needed)'",
