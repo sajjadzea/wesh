@@ -6,9 +6,6 @@
     <title>تحلیل تعاملی بحران عدم تعادل برق ایران</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -282,9 +279,10 @@
 
         });
     </script>
-    <script type="text/babel" data-type="module">
-      import CausalGraph from "./dash/pages/causal-graph.js";
-      ReactDOM.createRoot(document.getElementById("causal-root")).render(<CausalGraph />);
+
+    <script src="./dash/pages/causal-graph.js"></script>
+    <script>
+      initCausalGraph("data/causal-power-imbalance.json");
     </script>
 </body>
 </html>
