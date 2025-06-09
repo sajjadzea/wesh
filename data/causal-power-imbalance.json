@@ -1,0 +1,61 @@
+{
+  "nodes": [
+    {
+      "data": {
+        "id": "demand",
+        "label": "تقاضای برق",
+        "description": "افزایش مداوم تقاضای برق در بخش‌های مختلف",
+        "resources": ["https://example.com/demand"]
+      }
+    },
+    {
+      "data": {
+        "id": "supply",
+        "label": "ظرفیت تولید برق",
+        "description": "ظرفیت موجود نیروگاه‌ها برای تأمین برق",
+        "resources": ["https://example.com/supply"]
+      }
+    },
+    {
+      "data": {
+        "id": "gap",
+        "label": "ناترازی برق",
+        "description": "اختلاف بین عرضه و تقاضای برق",
+        "resources": ["https://example.com/gap"]
+      }
+    },
+    {
+      "data": {
+        "id": "investment",
+        "label": "سرمایه‌گذاری",
+        "description": "سرمایه‌گذاری در توسعه نیروگاه‌ها",
+        "resources": ["https://example.com/investment"]
+      }
+    },
+    {
+      "data": {
+        "id": "tariff",
+        "label": "تعرفه برق",
+        "description": "سطح قیمت و یارانه برق",
+        "resources": ["https://example.com/tariff"]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "data": { "id": "e1", "source": "demand", "target": "gap", "type": "positive" }
+    },
+    {
+      "data": { "id": "e2", "source": "supply", "target": "gap", "type": "negative" }
+    },
+    {
+      "data": { "id": "e3", "source": "gap", "target": "investment", "type": "positive" }
+    },
+    {
+      "data": { "id": "e4", "source": "investment", "target": "supply", "type": "positive" }
+    },
+    {
+      "data": { "id": "e5", "source": "tariff", "target": "demand", "type": "negative" }
+    }
+  ]
+}
