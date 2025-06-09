@@ -14,3 +14,9 @@ python3 -m http.server 8000
 
 Alternatively, use any other static server (e.g. `npx serve`). Opening the HTML files directly via `file://` will not work because the graph data is loaded with `fetch`.
 
+
+## Features
+
+- Dependencies (Cytoscape.js, Tailwind) loaded via CDN
+- Node details shown in a sidebar when clicked
+- Works completely offline with a simple static server
