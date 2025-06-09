@@ -1,3 +1,26 @@
+function addDataToGraph(cy, data) {
+  if (!cy || !data) return;
+
+  if (Array.isArray(data.nodes)) {
+    cy.add(data.nodes);
+  }
+
+  if (Array.isArray(data.edges)) {
+    data.edges.forEach(function(edge) {
+      var src = edge.data && edge.data.source;
+      var tgt = edge.data && edge.data.target;
+      if (
+        src &&
+        tgt &&
+        cy.getElementById(src).length &&
+        cy.getElementById(tgt).length
+      ) {
+        cy.add(edge);
+      }
+    });
+  }
+}
+
 function initCausalGraph(dataPath) {
   const container = document.getElementById('cy');
   if (!container) {
@@ -27,7 +50,7 @@ function initCausalGraph(dataPath) {
       console.log(causalData); // log loaded data
       const cy = cytoscape({
         container: container,
-        elements: [].concat(causalData.nodes || [], causalData.edges || []),
+        elements: [],
         style: [
           {
             selector: 'node',
@@ -51,6 +74,8 @@ function initCausalGraph(dataPath) {
         ],
         layout: { name: 'cose' }
       });
+
+      addDataToGraph(cy, causalData);
 
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
