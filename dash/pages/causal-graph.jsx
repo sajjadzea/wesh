@@ -17,7 +17,9 @@ const CausalGraph = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log('Graph data:', data);
+        console.log('Nodes:', data.nodes);
+        console.log('Edges:', data.edges);
         if (!data.nodes || !data.edges) {
           throw new Error("Invalid data format");
         }
