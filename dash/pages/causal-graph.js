@@ -85,3 +85,32 @@ function initCausalGraph(dataPath) {
 }
 
 window.initCausalGraph = initCausalGraph;
+
+function addDataToGraph(cy, data) {
+  if (!cy || !data) return;
+
+  var newElements = [];
+
+  (data.nodes || []).forEach(function(n) {
+    var id = n && n.data && n.data.id;
+    if (id && cy.getElementById(id).empty()) {
+      newElements.push(n);
+    }
+  });
+
+  (data.edges || []).forEach(function(e) {
+    var d = e && e.data;
+    if (!d || !d.id) return;
+    if (!cy.getElementById(d.id).empty()) return;
+    if (!cy.getElementById(d.source).empty() && !cy.getElementById(d.target).empty()) {
+      newElements.push(e);
+    }
+  });
+
+  if (newElements.length) {
+    cy.add(newElements);
+    cy.layout({ name: 'cose' }).run();
+  }
+}
+
+window.addDataToGraph = addDataToGraph;
