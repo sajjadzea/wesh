@@ -17,6 +17,7 @@ function initCausalGraph(dataPath) {
   }
 
   const loadingEl = document.createElement('div');
+  let cy;
   loadingEl.textContent = 'در حال بارگذاری...';
   loadingEl.className = 'text-center my-4';
   container.appendChild(loadingEl);
@@ -82,6 +83,8 @@ function initCausalGraph(dataPath) {
     .finally(function() {
       loadingEl.remove();
     });
+
+  return cy;
 }
 
 window.initCausalGraph = initCausalGraph;
