@@ -6,6 +6,10 @@
     <title>تحلیل تعاملی بحران عدم تعادل برق ایران</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -24,9 +28,6 @@
         .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 350px; max-height: 50vh; }
         .active-tab { border-color: #0d9488; color: #0d9488; background-color: #f0fdfa; }
         .inactive-tab { border-color: transparent; color: #52525b; }
-        .loop-node { transition: all 0.3s ease-in-out; }
-        .loop-node.active { transform: scale(1.1); box-shadow: 0 0 15px rgba(13, 148, 136, 0.7); border-color: #0d9488; }
-        .loop-arrow { position: absolute; z-index: -1; }
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -108,7 +109,7 @@
                 <h2 class="text-2xl font-bold text-center mb-2 text-teal-800">بخش سوم: دینامیک سیستم - حلقه‌های بازخورد معیوب</h2>
                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">مشکل برق صرفاً مجموعه‌ای از عوامل مجزا نیست، بلکه یک سیستم پویا با حلقه‌های بازخورد تقویت‌کننده است که وضعیت را وخیم‌تر می‌کنند. دیاگرام زیر یکی از این حلقه‌های معیوب کلیدی («حلقه فرسایش سرمایه و ظرفیت») را نشان می‌دهد. برای تعامل، از ابزار زیر استفاده کنید.</p>
                 <div class="w-full max-w-4xl mx-auto">
-                    <iframe id="cld-frame" class="w-full h-[600px] border-0 rounded-lg" loading="lazy"></iframe>
+                    <div id="causal-root" class="w-full h-[600px]"></div>
                 </div>
             </section>
             
@@ -181,7 +182,6 @@
                 }
             };
 
-            const cldData = [[[1,420,220,0,"تقاضای برق (اوج مصرف)",0],[2,720,220,0,"ظرفیت تولید برق",1],[3,560,360,0,"ناترازی برق (شکاف عرضه/تقاضا)",2],[4,230,410,0,"قیمت/تعرفه برق",3],[5,870,120,0,"سرمایه‌گذاری سالیانه در ظرفیت جدید",4],[6,1020,220,0,"راندمان و بهره‌وری انرژی",5],[7,720,420,0,"یارانه انرژی",6],[8,420,470,0,"مصرف سرمایشی (گرمای تابستان)",7],[9,110,320,0,"مصرف خانگی",8],[10,920,420,0,"تلفات شبکه",9],[11,210,120,0,"جمعیت و تعداد مشترکان",10],[12,220,560,0,"برنامه‌های مدیریت مصرف",11],[13,870,310,0,"تولید برق آبی (وابسته به منابع آب)",12],[14,1070,120,0,"واردات برق",13],[15,1270,220,0,"تحریم‌ها و محدودیت تأمین مالی/فناوری",14],[16,430,580,0,"دما و تغییرات اقلیمی",15]],[[1,3,0.1,1],[2,3,0,-1],[3,5,0.1,0.9],[5,2,0.2,0.8],[4,1,0,-0.8],[7,4,-0.1,-1],[4,7,-0.1,-1],[6,1,0.1,-0.7],[3,12,0,0.6],[12,1,0,-0.6],[16,8,0,0.7],[8,1,0,0.6],[9,1,0,0.4],[11,9,0,0.6],[10,1,0.2,0.5],[2,10,-0.2,-0.5],[13,2,0.1,0.9],[16,13,0.2,-0.7],[15,5,0,-0.8],[14,2,0.1,0.7],[5,6,0.3,0.6],[4,11,-0.1,-0.5],[3,14,0.2,1],[14,15,0,0.8],[1,16,0.1,0.6]],[[700,40,"نمودار علی-معلولی عدم تعادل برق ایران (PESTLE)"]],17];
 
             const supplyDemandCtx = document.getElementById('supplyDemandChart').getContext('2d');
             new Chart(supplyDemandCtx, {
@@ -279,11 +279,12 @@
 
             renderDrivers('supply');
 
-            const cldFrame = document.getElementById('cld-frame');
-            const encodedCLD = encodeURIComponent(JSON.stringify(cldData));
-            cldFrame.src = `https://cld.schucan.com/?data=${encodedCLD}`;
 
         });
+    </script>
+    <script type="text/babel" data-type="module">
+      import CausalGraph from "./dash/pages/causal-graph.jsx";
+      ReactDOM.createRoot(document.getElementById("causal-root")).render(<CausalGraph />);
     </script>
 </body>
 </html>
