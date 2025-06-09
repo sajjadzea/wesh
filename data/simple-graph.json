@@ -1,0 +1,9 @@
+{
+  "nodes": [
+    { "data": { "id": "a", "label": "گره A" } },
+    { "data": { "id": "b", "label": "گره B" } }
+  ],
+  "edges": [
+    { "data": { "id": "ab", "source": "a", "target": "b", "type": "positive" } }
+  ]
+}

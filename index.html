@@ -292,7 +292,8 @@
 
     <script src="./dash/pages/causal-graph.js"></script>
     <script>
-      initCausalGraph("data/causal-power-imbalance.json");
+      // cache busting query param ensures the latest JSON is loaded
+      initCausalGraph("data/causal-power-imbalance.json?v=" + Date.now());
     </script>
 </body>
 </html>

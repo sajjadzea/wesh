@@ -48,7 +48,8 @@ function initCausalGraph(dataPath) {
   fetch(dataPath)
     .then(function(res) { return res.json(); })
     .then(function(causalData) {
-      console.log(causalData); // log loaded data
+      // Log the raw data to verify it loaded correctly
+      console.log('Fetched graph data:', causalData);
       const cy = cytoscape({
         container: container,
         elements: [],
@@ -77,6 +78,9 @@ function initCausalGraph(dataPath) {
       });
 
       addDataToGraph(cy, causalData);
+
+      // log element counts to check against the JSON file
+      console.log('Graph now has', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
 
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
