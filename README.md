@@ -1,5 +1,8 @@
 # wesh
 
+[![CI](https://github.com/openai/wesh/actions/workflows/ci.yml/badge.svg)](https://github.com/openai/wesh/actions/workflows/ci.yml)
+[![Pages](https://github.com/openai/wesh/actions/workflows/static.yml/badge.svg)](https://github.com/openai/wesh/actions/workflows/static.yml)
+
 This repository hosts a small static dashboard to visualise causal relationships in Iran's electricity sector.
 
 ## Running locally
@@ -44,6 +47,10 @@ npm test        # run tests with Jest
 npm run build   # build the project
 npm run release # run semantic-release
 ```
+
+The build output is written to `public/` which GitHub Pages serves. Pre-commit
+hooks powered by Husky automatically run linting and formatting before every
+commit.
 
 ## Continuous Integration
 
