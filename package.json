@@ -4,14 +4,14 @@
   "description": "Causal Graph Visualization project",
   "main": "index.js",
   "scripts": {
-
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --write 'src/**/*.{js,ts,json,md}'",
     "release": "semantic-release",
     "prepare": "husky install",
     "build": "npm run build:css",
-    "build:css": "postcss src/styles/tailwind.css -o public/assets/tailwind.css"
+    "build:css": "postcss src/styles/tailwind.css -o public/assets/tailwind.css",
+    "verify:pages": "bash scripts/verify-pages.sh"
   },
   "author": "",
   "license": "MIT",
