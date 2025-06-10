@@ -9,6 +9,7 @@ function initCausalGraph(dataPath) {
   const titleEl = document.getElementById('node-info-title');
   const descEl = document.getElementById('node-info-desc');
   const resEl = document.getElementById('node-info-resources');
+  const loopListEl = document.getElementById('loop-list');
   const closeBtn = document.getElementById('node-info-close');
   if (closeBtn && sidebar) {
     closeBtn.addEventListener('click', function() {
@@ -50,17 +51,7 @@ function initCausalGraph(dataPath) {
             }
           },
           {
-            selector: 'edge[type="positive"]',
-            style: {
-              'line-color': '#16a34a',
-              'target-arrow-color': '#16a34a'
-            }
-          },
-          {
-            selector: 'edge[type="negative"]',
-            style: {
-              'line-color': '#dc2626',
-              'target-arrow-color': '#dc2626'
+
             }
           }
         ],
@@ -70,6 +61,8 @@ function initCausalGraph(dataPath) {
       addDataToGraph(cy, causalData);
       // log the edge count right after adding data
       console.log('Edges after addDataToGraph:', cy.edges().length);
+
+      labelLoops(cy, loopListEl);
 
       // log element counts to check against the JSON file
       console.log('Graph now has', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
@@ -158,3 +151,76 @@ function addDataToGraph(cy, data) {
 }
 
 window.addDataToGraph = addDataToGraph;
+
+function labelLoops(cy, listEl) {
+  if (!cy) return;
+  if (listEl) listEl.innerHTML = '';
+
+  var loops = findLoops(cy);
+  var r = 0, b = 0;
+
+  loops.forEach(function(loop) {
+    var neg = loop.filter(function(e){ return e.data('type') === 'negative'; }).length;
+    var isRe = neg % 2 === 0;
+    var label = (isRe ? 'R' : 'B') + (isRe ? ++r : ++b);
+    var firstEdge = loop[0];
+    firstEdge.data('loopLabel', label);
+
+    if (listEl) {
+      var li = document.createElement('li');
+      li.textContent = label;
+      listEl.appendChild(li);
+    }
+  });
+
+  // simple tooltip on hover
+  cy.on('mouseover', 'edge[loopLabel]', function(evt){
+    var t = document.createElement('div');
+    t.className = 'loop-tooltip';
+    t.textContent = evt.target.data('loopLabel');
+    document.body.appendChild(t);
+
+    var update = function(){
+      var pos = evt.target.midpoint();
+      var pan = cy.pan();
+      var zoom = cy.zoom();
+      t.style.left = (pos.x * zoom + pan.x) + 'px';
+      t.style.top = (pos.y * zoom + pan.y - 20) + 'px';
+    };
+    update();
+    evt.target.on('mousemove', update);
+    evt.target.one('mouseout', function(){
+      evt.target.removeListener('mousemove', update);
+      t.remove();
+    });
+  });
+}
+
+function findLoops(cy){
+  var cycles = [];
+  var seen = new Set();
+
+  function dfs(start, node, path, visited){
+    visited.add(node.id());
+    node.outgoers('edge').forEach(function(edge){
+      var target = edge.target();
+      if(target.id() === start.id()){
+        var cycle = path.concat([edge]);
+        var key = cycle.map(function(e){ return e.id(); }).sort().join('-');
+        if(!seen.has(key)){
+          seen.add(key);
+          cycles.push(cycle);
+        }
+      } else if(!visited.has(target.id())) {
+        dfs(start, target, path.concat([edge]), visited);
+      }
+    });
+    visited.delete(node.id());
+  }
+
+  cy.nodes().forEach(function(n){
+    dfs(n, n, [], new Set());
+  });
+
+  return cycles;
+}

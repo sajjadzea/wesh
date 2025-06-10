@@ -27,6 +27,7 @@
         .inactive-tab { border-color: transparent; color: #52525b; }
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loop-tooltip { position: absolute; background: #fff; border: 1px solid #000; padding: 2px 4px; font-size: 12px; pointer-events: none; z-index: 1000; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -128,6 +129,10 @@
                 </div>
                 <p id="node-info-desc" class="text-sm text-slate-700 mb-4"></p>
                 <ul id="node-info-resources" class="list-disc pr-5 space-y-2 text-sm"></ul>
+                <div class="mt-4">
+                    <h3 class="font-bold mb-2">حلقه‌ها</h3>
+                    <ul id="loop-list" class="list-disc pr-5 space-y-1 text-sm"></ul>
+                </div>
             </div>
 
             <section id="solutions" class="bg-teal-50 p-8 rounded-xl border-t-4 border-teal-600">
