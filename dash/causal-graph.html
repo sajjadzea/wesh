@@ -83,22 +83,23 @@
     </div>
     <script src="pages/causal-graph.js"></script>
     <script>
-  const cy = initCausalGraph('../data/causal-power-imbalance.json');
-  // Temporary edge style test
-  cy.style()
-    .selector('edge')
-    .style({
-      'line-color': 'red',
-      'width': 4,
-      'target-arrow-shape': 'triangle'
-    })
-    .update();
-  document.getElementById('add-data-btn')
-    .addEventListener('click', () => {
-      fetch('../data/new-elements.json')
-        .then(res => res.json())
-        .then(data => addDataToGraph(cy, data));
-    });
+  initCausalGraph('../data/causal-power-imbalance.json').then(cy => {
+    // Temporary edge style test
+    cy.style()
+      .selector('edge')
+      .style({
+        'line-color': 'red',
+        'width': 4,
+        'target-arrow-shape': 'triangle'
+      })
+      .update();
+    document.getElementById('add-data-btn')
+      .addEventListener('click', () => {
+        fetch('../data/new-elements.json')
+          .then(res => res.json())
+          .then(data => addDataToGraph(cy, data));
+      });
+  });
 
   const helpBtn = document.getElementById('graph-help-btn');
   const helpModal = document.getElementById('graph-help-modal');

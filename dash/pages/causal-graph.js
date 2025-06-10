@@ -1,9 +1,11 @@
 function initCausalGraph(dataPath) {
-  const container = document.getElementById('cy');
-  if (!container) {
-    console.error('Container element with id "cy" not found');
-    return;
-  }
+  return new Promise(function(resolve, reject) {
+    const container = document.getElementById('cy');
+    if (!container) {
+      console.error('Container element with id "cy" not found');
+      reject(new Error('Container element with id "cy" not found'));
+      return;
+    }
   const sliderContainer = document.getElementById('time-slider-container');
   const slider = document.getElementById('time-slider');
   const sliderLabel = document.getElementById('time-label');
@@ -193,16 +195,19 @@ function initCausalGraph(dataPath) {
           cy.edges().removeClass('highlight faded');
         }
       });
+
+      resolve(cy);
     })
     .catch(function(err) {
       console.error('Error loading graph data', err);
       container.innerHTML = '<div class="text-red-600">خطا در بارگذاری داده‌های نمودار</div>';
+      reject(err);
     })
     .finally(function() {
       loadingEl.remove();
     });
+  });
 
-  return cy;
 }
 
 window.initCausalGraph = initCausalGraph;
