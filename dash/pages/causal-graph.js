@@ -96,14 +96,20 @@ function initCausalGraph(dataPath) {
       const zoomResetBtn = document.getElementById('zoom-reset');
 
       function updateEdgeVisibility() {
-        cy.edges().forEach(function(edge) {
-          var loop = edge.data('loop') || (edge.data('sign') === 'negative' ? 'B' : 'R');
-          if ((loop === 'R' && toggleR && !toggleR.checked) || (loop === 'B' && toggleB && !toggleB.checked)) {
-            edge.hide();
-          } else {
-            edge.show();
-          }
-        });
+        var edges = cy.edges();
+        edges.hide();
+        if (toggleR && toggleR.checked) {
+          edges.filter(function(edge){
+            var loop = edge.data('loop') || (edge.data('sign') === 'negative' ? 'B' : 'R');
+            return loop === 'R';
+          }).show();
+        }
+        if (toggleB && toggleB.checked) {
+          edges.filter(function(edge){
+            var loop = edge.data('loop') || (edge.data('sign') === 'negative' ? 'B' : 'R');
+            return loop === 'B';
+          }).show();
+        }
       }
 
       if (toggleR) toggleR.addEventListener('change', updateEdgeVisibility);

@@ -25,10 +25,20 @@
                 <span class="w-3 h-3 rounded-full bg-red-600 mr-2 inline-block"></span>
             </div>
         </div>
-        <div id="cy-controls" class="absolute top-2 right-2 flex gap-1">
-            <button id="zoom-in" class="bg-white px-2 py-1 rounded shadow">+</button>
-            <button id="zoom-out" class="bg-white px-2 py-1 rounded shadow">−</button>
-            <button id="reset-zoom" class="bg-white px-2 py-1 rounded shadow">↺</button>
+        <div id="cy-controls" class="absolute top-2 right-2 flex flex-col items-end gap-1">
+            <div class="flex gap-1">
+                <button id="zoom-in" class="bg-white px-2 py-1 rounded shadow">+</button>
+                <button id="zoom-out" class="bg-white px-2 py-1 rounded shadow">−</button>
+                <button id="reset-zoom" class="bg-white px-2 py-1 rounded shadow">↺</button>
+            </div>
+            <label class="bg-white px-2 py-1 rounded shadow text-xs flex items-center gap-1">
+                <input type="checkbox" id="toggle-reinforcing" class="mr-1" checked>
+                <span>نمایش حلقه‌های تقویتی (R)</span>
+            </label>
+            <label class="bg-white px-2 py-1 rounded shadow text-xs flex items-center gap-1">
+                <input type="checkbox" id="toggle-balancing" class="mr-1" checked>
+                <span>نمایش حلقه‌های تعادلی (B)</span>
+            </label>
         </div>
     </div>
     <button id="add-data-btn" class="mt-2 px-4 py-1 bg-blue-600 text-white rounded">افزودن داده</button>
