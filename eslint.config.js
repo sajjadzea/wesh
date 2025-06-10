@@ -1,30 +1,29 @@
-const js = require('@eslint/js');
-const globals = require('globals');
-const react = require('eslint-plugin-react');
-
-module.exports = [
-  {
-    ignores: ['public/js/**', 'examples/**', 'public/assets/**', 'test/**'],
+module.exports = {
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
   },
-  js.configs.recommended,
-  {
-    languageOptions: {
-      ecmaVersion: 12,
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...globals.jest,
-      },
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    plugins: {
-      react,
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-    rules: {},
+    ecmaVersion: 12,
+    sourceType: "module",
   },
-];
+  plugins: [
+    "react"
+  ],
+  rules: {
+    // اینجا رول‌های خاص خودت را اضافه کن
+  },
+  settings: {
+    react: {
+      version: "detect"
+    }
+  }
+};
