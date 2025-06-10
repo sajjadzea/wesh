@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Container #cy not found');
     return;
   }
-  initCausalGraph('data/causal-power-imbalance.json').then(cy => {
+  initCausalGraph('/wesh/data/causal-power-imbalance.json').then(cy => {
     window.cyInstance = cy;
   });
 });
