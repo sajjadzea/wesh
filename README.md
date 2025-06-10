@@ -73,6 +73,14 @@ npm test          # run Jest tests
 npm run build:css # compile Tailwind CSS
 ```
 
+### Deployment
+
+The `public/` folder contains the static site that is published to GitHub Pages.
+Ensure the Pages source is set to the `gh-pages` branch, which is populated from
+`public/` by the workflow in `.github/workflows`. If Pages shows the README
+instead of the dashboard, check that the workflow has pushed the latest
+`public/index.html`.
+
 
 
 ## Testing

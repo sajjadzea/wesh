@@ -6,6 +6,6 @@
     "start": "echo 'start step (customize as needed)'",
     "test": "echo 'no test defined'",
     "lint": "echo 'lint step (customize as needed)'"
-  },
+  }
 
 }
