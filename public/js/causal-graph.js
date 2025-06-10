@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Container #cy not found');
     return;
   }
-  // Use a path relative to the server root so the file loads correctly
-  // regardless of where the project directory is served from.
-  initCausalGraph('/data/causal-power-imbalance.json').then(cy => {
+  // Use a relative path so the file also loads correctly on GitHub Pages
+  // where the project is served from a subdirectory.
+  initCausalGraph('data/causal-power-imbalance.json').then(cy => {
     window.cyInstance = cy;
   });
 });
@@ -65,6 +65,8 @@ function initCausalGraph(dataPath) {
       return res.json();
     })
     .then(function(causalData) {
+      // Debug: ensure the expected data is loaded
+      console.log('Graph data loaded', causalData);
       // Map relation type to color while preserving the original sign
       (causalData.edges || []).forEach(function(e) {
         var sign = e.data.type; // 'positive' or 'negative'
