@@ -122,9 +122,7 @@ function initCausalGraph(dataPath) {
         'width': 2,
         'target-arrow-shape': 'triangle'
       }).update();
-      cy.layout({ name: 'cose' }).run();
-      cy.resize();
-      cy.fit();
+      runLayoutSafe(cy);
       console.log('مرحله ۴ OK: resize و fit انجام شد');
       console.log('Cytoscape elements:', cy.elements().length);
 
@@ -259,6 +257,20 @@ function initCausalGraph(dataPath) {
 
 window.initCausalGraph = initCausalGraph;
 
+function runLayoutSafe(cy) {
+  if (!cy) return;
+  cy.ready(function() {
+    var layout = cy.layout({ name: 'cose' });
+    layout.run();
+    layout.one('layoutstop', function () {
+      if (cy.container()) {
+        cy.resize();
+        cy.fit();
+      }
+    });
+  });
+}
+
 function addDataToGraph(cy, data) {
   if (!cy || !data) return;
 
@@ -283,9 +295,7 @@ function addDataToGraph(cy, data) {
   if (newElements.length) {
     cy.add(newElements);
     console.log('Edges count after add:', cy.edges().length);
-    cy.layout({ name: 'cose' }).run();
-    cy.resize();
-    cy.fit();
+    runLayoutSafe(cy);
     console.log('مرحله ۴ OK: resize و fit انجام شد');
     if (cy.forceRender) cy.forceRender();
   }
