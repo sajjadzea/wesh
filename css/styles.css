@@ -1,0 +1,7 @@
+body { font-family: 'Vazirmatn', sans-serif; margin: 0; }
+#graph-section, #dashboard-section { padding: 1rem; }
+#graph-section { border-bottom: 1px solid #e5e7eb; }
+#dashboard-section { display: flex; flex-direction: column; gap: 1rem; }
+#dashboard-cards { display: grid; grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); gap: 1rem; }
+.dashboard-card { background:#fff; border:1px solid #e5e7eb; padding:1rem; border-radius:0.5rem; text-align:center; }
+.sidebar { position: fixed; left:0; top:0; width:200px; height:100%; background:#f8fafc; border-right:1px solid #e5e7eb; padding:1rem; overflow:auto; }
