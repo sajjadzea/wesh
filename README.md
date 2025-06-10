@@ -43,7 +43,6 @@ project-root/
 * `data/` holds example graph data used by the dashboard.
 * `scripts/` provides helper scripts for development and release.
 * `docs/CLD/` contains archived documentation for the old CLD tool.
-* `examples/` hosts experimental projects such as `cld-tool`.
 
 ## Development
 
