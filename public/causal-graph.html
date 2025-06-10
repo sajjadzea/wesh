@@ -85,10 +85,9 @@
     <script src="js/causal-graph.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        // Load data from the repository root rather than a hard coded
-        // "/wesh" sub-path to avoid 404 errors when the project is served
-        // from its own root directory.
-        initCausalGraph('/data/causal-power-imbalance.json');
+        // Use a relative path so GitHub Pages serves the data correctly
+        // even when the project is hosted in a subdirectory.
+        initCausalGraph('data/causal-power-imbalance.json');
       });
     </script>
 
