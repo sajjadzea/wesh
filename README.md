@@ -107,4 +107,6 @@ If the site ever loads the repository `README.md` instead of `public/index.html`
 
 Jest tests live in `test/`. Run them with:
 
-
+```bash
+npm test
+```
