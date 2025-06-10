@@ -107,18 +107,20 @@
                 <h2 class="text-2xl font-bold text-center mb-2 text-teal-800">بخش سوم: دینامیک سیستم - حلقه‌های بازخورد معیوب</h2>
                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">مشکل برق صرفاً مجموعه‌ای از عوامل مجزا نیست، بلکه یک سیستم پویا با حلقه‌های بازخورد تقویت‌کننده است که وضعیت را وخیم‌تر می‌کنند. دیاگرام زیر یکی از این حلقه‌های معیوب کلیدی («حلقه فرسایش سرمایه و ظرفیت») را نشان می‌دهد. برای تعامل، از ابزار زیر استفاده کنید.</p>
 
-                    <div id="cy" class="w-full h-[600px]"></div>
-                    <div id="cy-legend" class="absolute bottom-2 left-2 bg-white/80 backdrop-blur-sm rounded-md shadow px-3 py-2 text-xs">
-                        <div class="flex items-center mb-1">
-                            <span class="text-xs">رابطه مثبت (تقویتی)</span>
-                            <span class="w-3 h-3 rounded-full bg-green-600 mr-2 inline-block"></span>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="text-xs">رابطه منفی (متعادل‌کننده)</span>
-                            <span class="w-3 h-3 rounded-full bg-red-600 mr-2 inline-block"></span>
+                    <div class="relative">
+                        <div id="cy" class="w-full h-[600px]"></div>
+                        <button id="graph-help-btn" class="absolute top-2 right-2 bg-teal-600 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center">?</button>
+                        <div id="cy-legend" class="absolute bottom-2 left-2 bg-white/80 backdrop-blur-sm rounded-md shadow px-3 py-2 text-xs">
+                            <div class="flex items-center mb-1">
+                                <span class="text-xs">رابطه مثبت (تقویتی)</span>
+                                <span class="w-3 h-3 rounded-full bg-green-600 mr-2 inline-block"></span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-xs">رابطه منفی (متعادل‌کننده)</span>
+                                <span class="w-3 h-3 rounded-full bg-red-600 mr-2 inline-block"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
             </section>
 
             <!-- Sidebar for node details -->
@@ -132,6 +134,21 @@
                 <div class="mt-4">
                     <h3 class="font-bold mb-2">حلقه‌ها</h3>
                     <ul id="loop-list" class="list-disc pr-5 space-y-1 text-sm"></ul>
+                </div>
+            </div>
+
+            <div id="graph-help-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div class="bg-white p-6 rounded-lg max-w-sm w-11/12">
+                    <h2 class="font-bold mb-4 text-center">راهنمای نمودار</h2>
+                    <ul class="list-disc pr-5 text-sm space-y-2">
+                        <li>برای مشاهده اطلاعات هر گره روی آن کلیک کنید.</li>
+                        <li>با گزینه فیلتر می‌توان حلقه‌های تقویتی یا متعادل‌کننده را مخفی کرد.</li>
+                        <li>برای زوم یا ریست از اسکرول ماوس یا دکمه‌های مربوط استفاده کنید.</li>
+                        <li>سایدبار با کلیک روی گره باز شده و با ضربدر بسته می‌شود.</li>
+                    </ul>
+                    <div class="text-center mt-4">
+                        <button id="graph-help-close" class="px-4 py-1 bg-teal-600 text-white rounded">بستن</button>
+                    </div>
                 </div>
             </div>
 
@@ -309,6 +326,17 @@
     <script>
       // cache busting query param ensures the latest JSON is loaded
       initCausalGraph("data/causal-power-imbalance.json?v=" + Date.now());
+
+      const helpBtn = document.getElementById('graph-help-btn');
+      const helpModal = document.getElementById('graph-help-modal');
+      const helpClose = document.getElementById('graph-help-close');
+      if (helpBtn && helpModal && helpClose) {
+        helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
+        helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
+        helpModal.addEventListener('click', (e) => {
+          if (e.target === helpModal) helpModal.classList.add('hidden');
+        });
+      }
     </script>
 </body>
 </html>
