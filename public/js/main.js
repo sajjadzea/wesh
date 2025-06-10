@@ -8,8 +8,8 @@ async function fetchJSON(path) {
 
 async function initGraph() {
   const [nodes, edges] = await Promise.all([
-    fetchJSON('./data/graph/nodes.json'),
-    fetchJSON('./data/graph/edges.json')
+    fetchJSON('/data/graph/nodes.json'),
+    fetchJSON('/data/graph/edges.json')
   ]);
   cytoscape({
     container: document.getElementById('graph-container'),
