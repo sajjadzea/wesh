@@ -29,3 +29,8 @@ If the counts differ, check that `data/causal-power-imbalance.json` is up to dat
 - Dependencies (Cytoscape.js, Tailwind) loaded via CDN
 - Node details shown in a sidebar when clicked
 - Works completely offline with a simple static server
+
+## Release script
+
+Run `node scripts/release.js <major|minor|patch>` or set `BUMP` env var to bump the version, tag, push and create a GitHub release. The script reads release notes from `CHANGELOG.md` (section `## vX.Y.Z`) and appends a demo link from `package.json` if present.
+
