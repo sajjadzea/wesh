@@ -93,6 +93,27 @@ function initCausalGraph(dataPath) {
 
       updateEdgeVisibility();
 
+      var zoomInBtn = document.getElementById('zoom-in');
+      var zoomOutBtn = document.getElementById('zoom-out');
+      var resetBtn = document.getElementById('reset-zoom');
+
+      function centerZoom(factor) {
+        cy.zoom({
+          level: cy.zoom() * factor,
+          renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 }
+        });
+      }
+
+      if (zoomInBtn) {
+        zoomInBtn.addEventListener('click', function() { centerZoom(1.2); });
+      }
+      if (zoomOutBtn) {
+        zoomOutBtn.addEventListener('click', function() { centerZoom(0.8); });
+      }
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function() { cy.fit(); });
+      }
+
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
         var d = evt.target.data();
