@@ -12,6 +12,7 @@ function initCausalGraph(dataPath) {
   const titleEl = document.getElementById('node-info-title');
   const descEl = document.getElementById('node-info-desc');
   const resEl = document.getElementById('node-info-resources');
+  const loopListEl = document.getElementById('loop-list');
   const closeBtn = document.getElementById('node-info-close');
   if (closeBtn && sidebar) {
     closeBtn.addEventListener('click', function() {
@@ -51,13 +52,15 @@ function initCausalGraph(dataPath) {
             selector: 'edge',
             style: {
               width: 4,
-              'line-color': 'red',
-              'target-arrow-color': 'red',
               'target-arrow-shape': 'triangle',
               'curve-style': 'bezier',
               opacity: 1,
               'transition-property': 'opacity',
               'transition-duration': '300ms'
+            }
+          },
+          {
+
             }
           }
         ],
@@ -67,6 +70,8 @@ function initCausalGraph(dataPath) {
       addDataToGraph(cy, causalData);
       // log the edge count right after adding data
       console.log('Edges after addDataToGraph:', cy.edges().length);
+
+      labelLoops(cy, loopListEl);
 
       // log element counts to check against the JSON file
       console.log('Graph now has', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
@@ -187,25 +192,11 @@ function addDataToGraph(cy, data) {
   if (newElements.length) {
     cy.add(newElements);
     console.log('Edges count after add:', cy.edges().length);
-    // temporarily highlight edges to debug visibility
-    cy.style()
-      .selector('edge')
-      .style({
-        'line-color': 'red',
-        width: 4,
-        'target-arrow-shape': 'triangle'
-      })
-      .update();
     cy.layout({ name: 'cose' }).run();
   }
 }
 
 window.addDataToGraph = addDataToGraph;
 
-function formatFaDate(ts) {
-  try {
-    return new Date(ts).toLocaleDateString('fa-IR');
-  } catch (e) {
-    return ts;
-  }
+
 }
