@@ -43,6 +43,7 @@ function initCausalGraph(dataPath) {
       // Log the raw data to verify it loaded correctly
       console.log('Fetched graph data:', causalData);
       console.log('Edges array from fetch:', causalData.edges);
+      console.log('JSON Edges:', causalData.edges);
       cy = cytoscape({
         container: container,
         elements: [],
@@ -71,7 +72,17 @@ function initCausalGraph(dataPath) {
             }
           },
           {
-
+            selector: 'edge[type="positive"]',
+            style: {
+              'line-color': '#16a34a',
+              'target-arrow-color': '#16a34a'
+            }
+          },
+          {
+            selector: 'edge[type="negative"]',
+            style: {
+              'line-color': '#dc2626',
+              'target-arrow-color': '#dc2626'
             }
           }
         ],
@@ -123,8 +134,6 @@ function initCausalGraph(dataPath) {
         });
 
       updateEdgeVisibility();
-
-      }
 
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
@@ -235,5 +244,3 @@ function addDataToGraph(cy, data) {
 
 window.addDataToGraph = addDataToGraph;
 
-
-}
