@@ -43,7 +43,6 @@ project-root/
 * `data/` holds example graph data used by the dashboard.
 * `scripts/` provides helper scripts for development and release.
 * `docs/CLD/` contains archived documentation for the old CLD tool.
-* `examples/` hosts experimental projects such as `cld-tool`.
 
 ## Development
 
@@ -82,6 +81,14 @@ npm run lint
 
 The configuration lives in `eslint.config.js` and ignores generated assets and example files.
 
+
+### Deployment
+
+The `public/` folder contains the static site that is published to GitHub Pages.
+Ensure the Pages source is set to the `gh-pages` branch, which is populated from
+`public/` by the workflow in `.github/workflows`. If Pages shows the README
+instead of the dashboard, check that the workflow has pushed the latest
+`public/index.html`.
 
 
 

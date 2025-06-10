@@ -10,6 +10,7 @@
     "format": "prettier --write 'src/**/*.{js,ts,json,md}'",
     "release": "semantic-release",
     "prepare": "husky install",
+    "build": "npm run build:css",
     "build:css": "postcss src/styles/tailwind.css -o public/assets/tailwind.css"
   },
   "author": "",
