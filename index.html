@@ -351,24 +351,6 @@
         });
     </script>
 
-    <script src="https://unpkg.com/cytoscape@latest/dist/cytoscape.min.js"></script>
-    <script src="./dash/pages/causal-graph.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        console.log('مرحله ۱ OK: کانتینر وجود دارد و پنهان نیست');
-        console.log('مرحله ۲ OK: ترتیب لود اسکریپت‌ها درست است');
-        console.log('مرحله ۳ OK: کد بعد از لود کامل DOM اجرا می‌شود');
-        console.log('مرحله ۵ OK: z-index و پوشش بررسی شد');
-
-        initCausalGraph('data/test.json')
-          .then(() => console.log('مرحله ۶ OK یا خطا: تست ساده'))
-          .catch(err => console.log('مرحله ۶ خطا:', err))
-          .finally(() => {
-            // cache busting query param ensures the latest JSON is loaded
-            initCausalGraph('data/causal-power-imbalance.json?v=' + Date.now())
-              .then(() => console.log('نمودار با موفقیت نمایش داده شد!'));
-          });
-
         const helpBtn = document.getElementById('graph-help-btn');
         const helpModal = document.getElementById('graph-help-modal');
         const helpClose = document.getElementById('graph-help-close');

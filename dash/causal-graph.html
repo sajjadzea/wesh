@@ -80,51 +80,6 @@
             </div>
         </div>
     </div>
-    <script src="https://unpkg.com/cytoscape@latest/dist/cytoscape.min.js"></script>
-    <script src="pages/causal-graph.js"></script>
-    <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('مرحله ۱ OK: کانتینر وجود دارد و پنهان نیست');
-    console.log('مرحله ۲ OK: ترتیب لود اسکریپت‌ها درست است');
-    console.log('مرحله ۳ OK: کد بعد از لود کامل DOM اجرا می‌شود');
-    console.log('مرحله ۵ OK: z-index و پوشش بررسی شد');
 
-    initCausalGraph('../data/test.json')
-      .then(() => console.log('مرحله ۶ OK یا خطا: تست ساده'))
-      .catch(err => console.log('مرحله ۶ خطا:', err))
-      .finally(() => {
-        initCausalGraph('../data/causal-power-imbalance.json')
-          .then(cy => {
-            console.log('نمودار با موفقیت نمایش داده شد!');
-            cy.style()
-              .selector('edge')
-              .style({
-                'line-color': 'red',
-                'width': 4,
-                'target-arrow-shape': 'triangle'
-              })
-              .update();
-            document.getElementById('add-data-btn')
-              .addEventListener('click', () => {
-                fetch('../data/new-elements.json')
-                  .then(res => res.json())
-                  .then(data => addDataToGraph(cy, data));
-              });
-          });
-      });
-
-    const helpBtn = document.getElementById('graph-help-btn');
-    const helpModal = document.getElementById('graph-help-modal');
-    const helpClose = document.getElementById('graph-help-close');
-    if (helpBtn && helpModal && helpClose) {
-      helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
-      helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
-      helpModal.addEventListener('click', (e) => {
-        if (e.target === helpModal) helpModal.classList.add('hidden');
-      });
-    }
-  });
-
-</script>
 </body>
 </html>

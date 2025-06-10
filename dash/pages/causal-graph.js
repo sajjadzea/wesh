@@ -274,3 +274,15 @@ function addDataToGraph(cy, data) {
 
 window.addDataToGraph = addDataToGraph;
 
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const cyContainer = document.getElementById("cy");
+  if (!cyContainer) {
+    console.warn("Container #cy not found—skipping graph init");
+  } else {
+    initCausalGraph("data/causal-power-imbalance.json").then(cy => {
+      window.cyInstance = cy;
+    });
+  }
+});
