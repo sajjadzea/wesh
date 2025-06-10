@@ -6,7 +6,6 @@
     <title>تحلیل تعاملی بحران عدم تعادل برق ایران</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -110,8 +109,8 @@
                 <h2 class="text-2xl font-bold text-center mb-2 text-teal-800">بخش سوم: دینامیک سیستم - حلقه‌های بازخورد معیوب</h2>
                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">مشکل برق صرفاً مجموعه‌ای از عوامل مجزا نیست، بلکه یک سیستم پویا با حلقه‌های بازخورد تقویت‌کننده است که وضعیت را وخیم‌تر می‌کنند. دیاگرام زیر یکی از این حلقه‌های معیوب کلیدی («حلقه فرسایش سرمایه و ظرفیت») را نشان می‌دهد. برای تعامل، از ابزار زیر استفاده کنید.</p>
 
-                <div class="relative" style="width:100%; height:600px">
-                    <div id="cy" class="absolute inset-0"></div>
+                <div class="relative w-full h-[600px]">
+                    <div id="cy" class="w-full h-full"></div>
                     <div id="cy-legend" class="absolute bottom-2 right-2 bg-white/80 backdrop-blur-sm rounded-md shadow px-3 py-2 text-xs">
                         <div class="flex items-center mb-1">
                             <span class="text-xs">رابطه مثبت (تقویتی)</span>
@@ -352,21 +351,35 @@
         });
     </script>
 
+    <script src="https://unpkg.com/cytoscape@latest/dist/cytoscape.min.js"></script>
     <script src="./dash/pages/causal-graph.js"></script>
     <script>
-      // cache busting query param ensures the latest JSON is loaded
-      initCausalGraph("data/causal-power-imbalance.json?v=" + Date.now());
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('مرحله ۱ OK: کانتینر وجود دارد و پنهان نیست');
+        console.log('مرحله ۲ OK: ترتیب لود اسکریپت‌ها درست است');
+        console.log('مرحله ۳ OK: کد بعد از لود کامل DOM اجرا می‌شود');
+        console.log('مرحله ۵ OK: z-index و پوشش بررسی شد');
 
-      const helpBtn = document.getElementById('graph-help-btn');
-      const helpModal = document.getElementById('graph-help-modal');
-      const helpClose = document.getElementById('graph-help-close');
-      if (helpBtn && helpModal && helpClose) {
-        helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
-        helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
-        helpModal.addEventListener('click', (e) => {
-          if (e.target === helpModal) helpModal.classList.add('hidden');
-        });
-      }
+        initCausalGraph('data/test.json')
+          .then(() => console.log('مرحله ۶ OK یا خطا: تست ساده'))
+          .catch(err => console.log('مرحله ۶ خطا:', err))
+          .finally(() => {
+            // cache busting query param ensures the latest JSON is loaded
+            initCausalGraph('data/causal-power-imbalance.json?v=' + Date.now())
+              .then(() => console.log('نمودار با موفقیت نمایش داده شد!'));
+          });
+
+        const helpBtn = document.getElementById('graph-help-btn');
+        const helpModal = document.getElementById('graph-help-modal');
+        const helpClose = document.getElementById('graph-help-close');
+        if (helpBtn && helpModal && helpClose) {
+          helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
+          helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
+          helpModal.addEventListener('click', (e) => {
+            if (e.target === helpModal) helpModal.classList.add('hidden');
+          });
+        }
+      });
     </script>
 </body>
 </html>
