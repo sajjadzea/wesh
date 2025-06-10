@@ -4,11 +4,15 @@ function initCausalGraph(dataPath) {
     console.error('Container element with id "cy" not found');
     return;
   }
+  const sliderContainer = document.getElementById('time-slider-container');
+  const slider = document.getElementById('time-slider');
+  const sliderLabel = document.getElementById('time-label');
 
   const sidebar = document.getElementById('node-info-sidebar');
   const titleEl = document.getElementById('node-info-title');
   const descEl = document.getElementById('node-info-desc');
   const resEl = document.getElementById('node-info-resources');
+  const loopListEl = document.getElementById('loop-list');
   const closeBtn = document.getElementById('node-info-close');
   if (closeBtn && sidebar) {
     closeBtn.addEventListener('click', function() {
@@ -28,7 +32,7 @@ function initCausalGraph(dataPath) {
       // Log the raw data to verify it loaded correctly
       console.log('Fetched graph data:', causalData);
       console.log('Edges array from fetch:', causalData.edges);
-      const cy = cytoscape({
+      cy = cytoscape({
         container: container,
         elements: [],
         style: [
@@ -38,7 +42,10 @@ function initCausalGraph(dataPath) {
               label: 'data(label)',
               'background-color': '#007bff',
               width: 50,
-              height: 50
+              height: 50,
+              opacity: 1,
+              'transition-property': 'opacity',
+              'transition-duration': '300ms'
             }
           },
           {
@@ -46,21 +53,14 @@ function initCausalGraph(dataPath) {
             style: {
               width: 4,
               'target-arrow-shape': 'triangle',
-              'curve-style': 'bezier'
+              'curve-style': 'bezier',
+              opacity: 1,
+              'transition-property': 'opacity',
+              'transition-duration': '300ms'
             }
           },
           {
-            selector: 'edge[type="positive"]',
-            style: {
-              'line-color': '#16a34a',
-              'target-arrow-color': '#16a34a'
-            }
-          },
-          {
-            selector: 'edge[type="negative"]',
-            style: {
-              'line-color': '#dc2626',
-              'target-arrow-color': '#dc2626'
+
             }
           }
         ],
@@ -71,11 +71,16 @@ function initCausalGraph(dataPath) {
       // log the edge count right after adding data
       console.log('Edges after addDataToGraph:', cy.edges().length);
 
+      labelLoops(cy, loopListEl);
+
       // log element counts to check against the JSON file
       console.log('Graph now has', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
 
       const toggleR = document.getElementById('toggle-reinforcing');
       const toggleB = document.getElementById('toggle-balancing');
+      const zoomInBtn = document.getElementById('zoom-in');
+      const zoomOutBtn = document.getElementById('zoom-out');
+      const zoomResetBtn = document.getElementById('zoom-reset');
 
       function updateEdgeVisibility() {
         cy.edges().forEach(function(edge) {
@@ -91,27 +96,23 @@ function initCausalGraph(dataPath) {
       if (toggleR) toggleR.addEventListener('change', updateEdgeVisibility);
       if (toggleB) toggleB.addEventListener('change', updateEdgeVisibility);
 
+      if (zoomInBtn)
+        zoomInBtn.addEventListener('click', function () {
+          cy.zoom(cy.zoom() * 1.2);
+        });
+
+      if (zoomOutBtn)
+        zoomOutBtn.addEventListener('click', function () {
+          cy.zoom(cy.zoom() * 0.8);
+        });
+
+      if (zoomResetBtn)
+        zoomResetBtn.addEventListener('click', function () {
+          cy.fit();
+        });
+
       updateEdgeVisibility();
 
-      var zoomInBtn = document.getElementById('zoom-in');
-      var zoomOutBtn = document.getElementById('zoom-out');
-      var resetBtn = document.getElementById('reset-zoom');
-
-      function centerZoom(factor) {
-        cy.zoom({
-          level: cy.zoom() * factor,
-          renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 }
-        });
-      }
-
-      if (zoomInBtn) {
-        zoomInBtn.addEventListener('click', function() { centerZoom(1.2); });
-      }
-      if (zoomOutBtn) {
-        zoomOutBtn.addEventListener('click', function() { centerZoom(0.8); });
-      }
-      if (resetBtn) {
-        resetBtn.addEventListener('click', function() { cy.fit(); });
       }
 
       cy.on('tap', 'node', function(evt) {
@@ -135,6 +136,20 @@ function initCausalGraph(dataPath) {
           }
         }
         sidebar.classList.remove('translate-x-full');
+
+        // highlight connected edges and fade others
+        var id = d.id;
+        var connectedEdges = cy.edges('[source = "' + id + '"]').union(cy.edges('[target = "' + id + '"]'));
+        cy.edges().removeClass('highlight faded');
+        connectedEdges.addClass('highlight');
+        cy.edges().not(connectedEdges).addClass('faded');
+      });
+
+      // clear highlights when tapping on empty space
+      cy.on('tap', function(evt) {
+        if (evt.target === cy) {
+          cy.edges().removeClass('highlight faded');
+        }
       });
     })
     .catch(function(err) {
@@ -179,3 +194,6 @@ function addDataToGraph(cy, data) {
 }
 
 window.addDataToGraph = addDataToGraph;
+
+
+}
