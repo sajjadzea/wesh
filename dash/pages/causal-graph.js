@@ -12,6 +12,10 @@ function initCausalGraph(dataPath) {
   const titleEl = document.getElementById('node-info-title');
   const descEl = document.getElementById('node-info-desc');
   const resEl = document.getElementById('node-info-resources');
+  const loopsEl = document.getElementById('node-info-loops');
+
+  const tabButtons = document.querySelectorAll('#node-info-tabs .tab-button');
+  const tabContents = document.querySelectorAll('#node-info-sidebar .tab-content');
 
   const closeBtn = document.getElementById('node-info-close');
   if (closeBtn && sidebar) {
@@ -40,11 +44,6 @@ function initCausalGraph(dataPath) {
   fetch(dataPath)
     .then(function(res) { return res.json(); })
     .then(function(causalData) {
-      // Log the raw data to verify it loaded correctly
-      console.log('Fetched graph data:', causalData);
-      console.log('Edges array from fetch:', causalData.edges);
-      console.log('JSON Edges:', causalData.edges);
-
       // Map relation type to color while preserving the original sign
       (causalData.edges || []).forEach(function(e) {
         var sign = e.data.type; // 'positive' or 'negative'
@@ -80,14 +79,11 @@ function initCausalGraph(dataPath) {
         layout: { name: 'cose' }
       });
 
-      addDataToGraph(cy, causalData);
-      // log the edge count right after adding data
-      console.log('Edges after addDataToGraph:', cy.edges().length);
-
-      labelLoops(cy, loopListEl);
-
-      // log element counts to check against the JSON file
-      console.log('Graph now has', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
+      console.log('Nodes:', (causalData.nodes || []).length,
+                  'Edges:', (causalData.edges || []).length);
+      cy.add([...(causalData.nodes || []), ...(causalData.edges || [])]);
+      cy.layout({ name: 'cose' }).run();
+      console.log('Cytoscape elements:', cy.elements().length);
 
       const toggleR = document.getElementById('toggle-reinforcing');
       const toggleB = document.getElementById('toggle-balancing');
