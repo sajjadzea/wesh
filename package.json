@@ -42,5 +42,10 @@
       "prettier --write",
       "eslint --fix"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openai/wesh.git"
+  },
+  "homepage": "https://openai.github.io/wesh"
 }
