@@ -4,8 +4,7 @@
   "description": "Causal Graph Visualization project",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build:css && node scripts/build.js",
-    "start": "echo 'start step (customize as needed)'",
+
     "test": "jest",
     "lint": "eslint .",
     "format": "prettier --write 'src/**/*.{js,ts,json,md}'",
