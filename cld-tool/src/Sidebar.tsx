@@ -1,7 +1,7 @@
 
 
 interface SidebarProps {
-  nodeId: string | null;
+  node: any | null;
   position: { x: number; y: number } | null;
   onClose: () => void;
 
@@ -13,10 +13,10 @@ interface SidebarProps {
     border: '1px solid #ccc',
     padding: '8px',
     zIndex: 1000,
+    width: 200,
   };
   return (
     <div style={style}>
-
     </div>
   );
 }

@@ -1,14 +1,11 @@
 {
   "name": "cld-tool",
-  "version": "1.0.0",
-  "description": "Causal Graph Visualization Tool",
-  "main": "index.js",
+
   "scripts": {
     "build": "echo 'build step (customize as needed)'",
     "start": "echo 'start step (customize as needed)'",
     "test": "echo 'no test defined'",
     "lint": "echo 'lint step (customize as needed)'"
   },
-  "author": "",
-  "license": "MIT"
+
 }

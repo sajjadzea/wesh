@@ -1,8 +1,9 @@
 
       <Graph
-        elements={elements}
-        onNodeClick={(id, pos) => {
-          setSidebarNode(id);
+        ref={graphRef}
+        search={search}
+        onNodeClick={(data, pos) => {
+          setSidebarNode(data);
           setSidebarPos(pos);
         }}
 
@@ -10,4 +11,4 @@
   );
 }
 
-export default App
+export default App;
