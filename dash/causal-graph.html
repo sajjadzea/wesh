@@ -6,7 +6,11 @@
     <title>نمودار علّی عرضه و تقاضای برق</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
-</head>
+    <style>
+      #cy { position: relative; z-index: 0; }
+      #cy-legend, #cy-controls { z-index: 10; }
+    </style>
+  </head>
 <body class="p-4">
     <div class="relative" style="width:100%; height:600px">
         <div id="cy" class="absolute inset-0"></div>
