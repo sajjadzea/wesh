@@ -82,7 +82,12 @@
     </div>
 
     <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
-    <script src="dash/pages/causal-graph.js"></script>
+    <script src="pages/causal-graph.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        initCausalGraph('data/causal-power-imbalance.json');
+      });
+    </script>
 
 </body>
 </html>
