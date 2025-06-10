@@ -113,41 +113,6 @@ function initCausalGraph(dataPath) {
 
       updateEdgeVisibility();
 
-      var timestamps = [];
-      (causalData.nodes || []).forEach(function(n){
-        var t = n.data && n.data.timestamp;
-        if (typeof t === 'number') timestamps.push(t);
-      });
-      (causalData.edges || []).forEach(function(e){
-        var t = e.data && e.data.timestamp;
-        if (typeof t === 'number') timestamps.push(t);
-      });
-
-      if (timestamps.length && slider && sliderContainer && sliderLabel) {
-        timestamps.sort(function(a,b){return a-b;});
-        slider.min = timestamps[0];
-        slider.max = timestamps[timestamps.length - 1];
-        slider.value = slider.max;
-        sliderContainer.classList.remove('hidden');
-        sliderLabel.textContent = formatFaDate(parseInt(slider.value, 10));
-
-        function updateTime() {
-          var val = parseInt(slider.value, 10);
-          sliderLabel.textContent = formatFaDate(val);
-          cy.batch(function(){
-            cy.nodes().forEach(function(n){
-              var ts = n.data('timestamp');
-              n.style('opacity', ts == null || ts <= val ? 1 : 0);
-            });
-            cy.edges().forEach(function(e){
-              var ts = e.data('timestamp');
-              e.style('opacity', ts == null || ts <= val ? 1 : 0);
-            });
-          });
-        }
-        slider.addEventListener('input', updateTime);
-        // initial filter
-        updateTime();
       }
 
       cy.on('tap', 'node', function(evt) {
