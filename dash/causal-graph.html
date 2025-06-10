@@ -12,8 +12,8 @@
     </style>
   </head>
 <body class="p-4">
-    <div class="relative" style="width:100%; height:600px">
-        <div id="cy" class="absolute inset-0"></div>
+    <div class="relative w-full h-[600px]">
+        <div id="cy" class="w-full h-full"></div>
 
         <div id="cy-legend" class="absolute bottom-2 right-2 bg-white/80 backdrop-blur-sm rounded-md shadow px-3 py-2 text-xs">
             <div class="flex items-center mb-1">
@@ -80,21 +80,6 @@
             </div>
         </div>
     </div>
-    <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
-    <script src="pages/causal-graph.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const helpBtn = document.getElementById('graph-help-btn');
-        const helpModal = document.getElementById('graph-help-modal');
-        const helpClose = document.getElementById('graph-help-close');
-        if (helpBtn && helpModal && helpClose) {
-          helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
-          helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
-          helpModal.addEventListener('click', (e) => {
-            if (e.target === helpModal) helpModal.classList.add('hidden');
-          });
-        }
-      });
-    </script>
+
 </body>
 </html>

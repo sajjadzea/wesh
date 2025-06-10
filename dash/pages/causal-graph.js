@@ -102,6 +102,9 @@ function initCausalGraph(dataPath) {
                   'Edges:', (causalData.edges || []).length);
       cy.add([...(causalData.nodes || []), ...(causalData.edges || [])]);
       cy.layout({ name: 'cose' }).run();
+      cy.resize();
+      cy.fit();
+      console.log('مرحله ۴ OK: resize و fit انجام شد');
       console.log('Cytoscape elements:', cy.elements().length);
 
       const toggleR = document.getElementById('toggle-reinforcing');
@@ -262,6 +265,9 @@ function addDataToGraph(cy, data) {
     cy.add(newElements);
     console.log('Edges count after add:', cy.edges().length);
     cy.layout({ name: 'cose' }).run();
+    cy.resize();
+    cy.fit();
+    console.log('مرحله ۴ OK: resize و fit انجام شد');
     if (cy.forceRender) cy.forceRender();
   }
 }
