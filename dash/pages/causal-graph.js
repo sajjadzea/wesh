@@ -50,6 +50,18 @@ function initCausalGraph(dataPath) {
             }
           },
           {
+            selector: 'edge.highlight',
+            style: {
+              width: 6
+            }
+          },
+          {
+            selector: 'edge.faded',
+            style: {
+              opacity: 0.1
+            }
+          },
+          {
             selector: 'edge[type="positive"]',
             style: {
               'line-color': '#16a34a',
@@ -114,6 +126,20 @@ function initCausalGraph(dataPath) {
           }
         }
         sidebar.classList.remove('translate-x-full');
+
+        // highlight connected edges and fade others
+        var id = d.id;
+        var connectedEdges = cy.edges('[source = "' + id + '"]').union(cy.edges('[target = "' + id + '"]'));
+        cy.edges().removeClass('highlight faded');
+        connectedEdges.addClass('highlight');
+        cy.edges().not(connectedEdges).addClass('faded');
+      });
+
+      // clear highlights when tapping on empty space
+      cy.on('tap', function(evt) {
+        if (evt.target === cy) {
+          cy.edges().removeClass('highlight faded');
+        }
       });
     })
     .catch(function(err) {
