@@ -14,15 +14,17 @@ module.exports = [
       globals: {
         ...globals.browser,
         ...globals.node,
+        ...globals.jest,
       },
     },
-  },
-  react.configs.flat.recommended,
-  {
+    plugins: {
+      react,
+    },
     settings: {
       react: {
         version: 'detect',
       },
     },
+    rules: {},
   },
 ];
