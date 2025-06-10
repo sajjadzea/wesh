@@ -107,13 +107,8 @@
                 <h2 class="text-2xl font-bold text-center mb-2 text-teal-800">بخش سوم: دینامیک سیستم - حلقه‌های بازخورد معیوب</h2>
                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">مشکل برق صرفاً مجموعه‌ای از عوامل مجزا نیست، بلکه یک سیستم پویا با حلقه‌های بازخورد تقویت‌کننده است که وضعیت را وخیم‌تر می‌کنند. دیاگرام زیر یکی از این حلقه‌های معیوب کلیدی («حلقه فرسایش سرمایه و ظرفیت») را نشان می‌دهد. برای تعامل، از ابزار زیر استفاده کنید.</p>
 
+
                     </div>
-                    <div id="cy-controls" class="absolute top-2 right-2 flex gap-1">
-                        <button id="zoom-in" class="bg-white px-2 py-1 rounded shadow">+</button>
-                        <button id="zoom-out" class="bg-white px-2 py-1 rounded shadow">−</button>
-                        <button id="reset-zoom" class="bg-white px-2 py-1 rounded shadow">↺</button>
-                    </div>
-                </div>
             </section>
 
             <!-- Sidebar for node details -->
@@ -123,6 +118,21 @@
                     <button id="node-info-close" class="text-slate-500 hover:text-slate-700">&times;</button>
                 </div>
 
+                </div>
+            </div>
+
+            <div id="graph-help-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div class="bg-white p-6 rounded-lg max-w-sm w-11/12">
+                    <h2 class="font-bold mb-4 text-center">راهنمای نمودار</h2>
+                    <ul class="list-disc pr-5 text-sm space-y-2">
+                        <li>برای مشاهده اطلاعات هر گره روی آن کلیک کنید.</li>
+                        <li>با گزینه فیلتر می‌توان حلقه‌های تقویتی یا متعادل‌کننده را مخفی کرد.</li>
+                        <li>برای زوم یا ریست از اسکرول ماوس یا دکمه‌های مربوط استفاده کنید.</li>
+                        <li>سایدبار با کلیک روی گره باز شده و با ضربدر بسته می‌شود.</li>
+                    </ul>
+                    <div class="text-center mt-4">
+                        <button id="graph-help-close" class="px-4 py-1 bg-teal-600 text-white rounded">بستن</button>
+                    </div>
                 </div>
             </div>
 
@@ -300,6 +310,17 @@
     <script>
       // cache busting query param ensures the latest JSON is loaded
       initCausalGraph("data/causal-power-imbalance.json?v=" + Date.now());
+
+      const helpBtn = document.getElementById('graph-help-btn');
+      const helpModal = document.getElementById('graph-help-modal');
+      const helpClose = document.getElementById('graph-help-close');
+      if (helpBtn && helpModal && helpClose) {
+        helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
+        helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
+        helpModal.addEventListener('click', (e) => {
+          if (e.target === helpModal) helpModal.classList.add('hidden');
+        });
+      }
     </script>
 </body>
 </html>
