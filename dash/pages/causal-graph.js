@@ -76,6 +76,9 @@ function initCausalGraph(dataPath) {
 
       const toggleR = document.getElementById('toggle-reinforcing');
       const toggleB = document.getElementById('toggle-balancing');
+      const zoomInBtn = document.getElementById('zoom-in');
+      const zoomOutBtn = document.getElementById('zoom-out');
+      const zoomResetBtn = document.getElementById('zoom-reset');
 
       function updateEdgeVisibility() {
         cy.edges().forEach(function(edge) {
@@ -90,6 +93,21 @@ function initCausalGraph(dataPath) {
 
       if (toggleR) toggleR.addEventListener('change', updateEdgeVisibility);
       if (toggleB) toggleB.addEventListener('change', updateEdgeVisibility);
+
+      if (zoomInBtn)
+        zoomInBtn.addEventListener('click', function () {
+          cy.zoom(cy.zoom() * 1.2);
+        });
+
+      if (zoomOutBtn)
+        zoomOutBtn.addEventListener('click', function () {
+          cy.zoom(cy.zoom() * 0.8);
+        });
+
+      if (zoomResetBtn)
+        zoomResetBtn.addEventListener('click', function () {
+          cy.fit();
+        });
 
       updateEdgeVisibility();
 
