@@ -38,8 +38,22 @@
             <h2 id="node-info-title" class="font-bold text-lg"></h2>
             <button id="node-info-close" class="text-slate-500 hover:text-slate-700">&times;</button>
         </div>
-        <p id="node-info-desc" class="text-sm text-slate-700 mb-4"></p>
-        <ul id="node-info-resources" class="list-disc pr-5 space-y-2 text-sm"></ul>
+        <div>
+            <nav id="node-info-tabs" class="flex mb-4 border-b">
+                <button data-tab="desc" class="tab-button px-3 py-1 border-b-2 active-tab">توضیحات</button>
+                <button data-tab="resources" class="tab-button px-3 py-1 border-b-2 inactive-tab">منابع</button>
+                <button data-tab="loops" class="tab-button px-3 py-1 border-b-2 inactive-tab">حلقه‌های مرتبط</button>
+            </nav>
+            <div id="tab-desc" class="tab-content">
+                <p id="node-info-desc" class="text-sm text-slate-700 mb-4"></p>
+            </div>
+            <div id="tab-resources" class="tab-content hidden">
+                <ul id="node-info-resources" class="list-disc pr-5 space-y-2 text-sm"></ul>
+            </div>
+            <div id="tab-loops" class="tab-content hidden">
+                <ul id="node-info-loops" class="list-disc pr-5 space-y-2 text-sm"></ul>
+            </div>
+        </div>
     </div>
     <script src="pages/causal-graph.js"></script>
     <script>
