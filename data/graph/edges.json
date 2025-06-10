@@ -1,0 +1,5 @@
+[
+  {"data": {"id": "e1", "source": "n1", "target": "n2", "type": "positive"}},
+  {"data": {"id": "e2", "source": "n2", "target": "n3", "type": "negative"}},
+  {"data": {"id": "e3", "source": "n3", "target": "n1", "type": "positive"}}
+]
