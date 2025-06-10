@@ -1,4 +1,4 @@
-import Chart from 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+import Chart from 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.esm.js';
 
 async function fetchJSON(path) {
   const res = await fetch(path);
