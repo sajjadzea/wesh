@@ -9,12 +9,26 @@ function initCausalGraph(dataPath) {
   const titleEl = document.getElementById('node-info-title');
   const descEl = document.getElementById('node-info-desc');
   const resEl = document.getElementById('node-info-resources');
+  const loopsEl = document.getElementById('node-info-loops');
+  const tabButtons = document.querySelectorAll('#node-info-tabs .tab-button');
+  const tabContents = document.querySelectorAll('#node-info-sidebar .tab-content');
   const closeBtn = document.getElementById('node-info-close');
   if (closeBtn && sidebar) {
     closeBtn.addEventListener('click', function() {
       sidebar.classList.add('translate-x-full');
     });
   }
+
+  tabButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      tabButtons.forEach(function(b) { b.classList.replace('active-tab', 'inactive-tab'); });
+      tabContents.forEach(function(c) { c.classList.add('hidden'); });
+      btn.classList.replace('inactive-tab', 'active-tab');
+      var tabId = 'tab-' + btn.getAttribute('data-tab');
+      var content = document.getElementById(tabId);
+      if (content) content.classList.remove('hidden');
+    });
+  });
 
   const loadingEl = document.createElement('div');
   let cy;
@@ -113,6 +127,35 @@ function initCausalGraph(dataPath) {
             });
           }
         }
+        if (loopsEl && cy) {
+          loopsEl.innerHTML = '';
+          var loopsSet = new Set();
+          cy.edges().forEach(function(edge) {
+            var data = edge.data();
+            if (data.source === d.id || data.target === d.id) {
+              var l = data.loop || (data.type === 'negative' ? 'B' : 'R');
+              loopsSet.add(l);
+            }
+          });
+          if (loopsSet.size) {
+            loopsSet.forEach(function(l) {
+              var li = document.createElement('li');
+              li.textContent = l === 'R' ? 'حلقه تقویتی' : 'حلقه متعادل‌کننده';
+              loopsEl.appendChild(li);
+            });
+          } else {
+            var li = document.createElement('li');
+            li.textContent = 'حلقه مرتبطی یافت نشد';
+            loopsEl.appendChild(li);
+          }
+        }
+        // reset tabs to description on each open
+        tabButtons.forEach(function(b) { b.classList.replace('active-tab', 'inactive-tab'); });
+        tabContents.forEach(function(c) { c.classList.add('hidden'); });
+        var firstTab = document.querySelector('#node-info-tabs [data-tab="desc"]');
+        if (firstTab) firstTab.classList.replace('inactive-tab', 'active-tab');
+        var firstContent = document.getElementById('tab-desc');
+        if (firstContent) firstContent.classList.remove('hidden');
         sidebar.classList.remove('translate-x-full');
       });
     })
