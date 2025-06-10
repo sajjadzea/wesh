@@ -1,26 +1,3 @@
-function addDataToGraph(cy, data) {
-  if (!cy || !data) return;
-
-  if (Array.isArray(data.nodes)) {
-    cy.add(data.nodes);
-  }
-
-  if (Array.isArray(data.edges)) {
-    data.edges.forEach(function(edge) {
-      var src = edge.data && edge.data.source;
-      var tgt = edge.data && edge.data.target;
-      if (
-        src &&
-        tgt &&
-        cy.getElementById(src).length &&
-        cy.getElementById(tgt).length
-      ) {
-        cy.add(edge);
-      }
-    });
-  }
-}
-
 function initCausalGraph(dataPath) {
   const container = document.getElementById('cy');
   if (!container) {
@@ -79,6 +56,8 @@ function initCausalGraph(dataPath) {
       });
 
       addDataToGraph(cy, causalData);
+      // log the edge count right after adding data
+      console.log('Edges after addDataToGraph:', cy.edges().length);
 
       // log element counts to check against the JSON file
       console.log('Graph now has', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
@@ -143,6 +122,15 @@ function addDataToGraph(cy, data) {
   if (newElements.length) {
     cy.add(newElements);
     console.log('Edges count after add:', cy.edges().length);
+    // temporarily highlight edges to debug visibility
+    cy.style()
+      .selector('edge')
+      .style({
+        'line-color': 'red',
+        width: 4,
+        'target-arrow-shape': 'triangle'
+      })
+      .update();
     cy.layout({ name: 'cose' }).run();
   }
 }
