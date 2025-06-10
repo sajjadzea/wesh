@@ -1,5 +1,5 @@
 export default {
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   transform: {},
-  modulePathIgnorePatterns: ['<rootDir>/examples/'],
+
 };

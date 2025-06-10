@@ -1,5 +1,8 @@
 /*! tailwindcss v4.1.8 | MIT License | https://tailwindcss.com */
 @layer properties;
+.visible {
+  visibility: visible;
+}
 .absolute {
   position: absolute;
 }
@@ -18,8 +21,8 @@
 .container {
   width: 100%;
 }
-.mx-auto {
-  margin-inline: auto;
+.block {
+  display: block;
 }
 .contents {
   display: contents;
@@ -42,9 +45,6 @@
 .h-full {
   height: 100%;
 }
-.max-h-\[40vh\] {
-  max-height: 40vh;
-}
 .w-11\/12 {
   width: calc(11/12 * 100%);
 }
@@ -58,17 +58,11 @@
 .transform {
   transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
 }
-.cursor-pointer {
-  cursor: pointer;
-}
 .resize {
   resize: both;
 }
 .list-disc {
   list-style-type: disc;
-}
-.grid-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .flex-col {
   flex-direction: column;
@@ -92,14 +86,6 @@
   border-style: var(--tw-border-style);
   border-width: 1px;
 }
-.border-t {
-  border-top-style: var(--tw-border-style);
-  border-top-width: 1px;
-}
-.border-t-4 {
-  border-top-style: var(--tw-border-style);
-  border-top-width: 4px;
-}
 .border-b {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 1px;
@@ -111,22 +97,34 @@
 .text-center {
   text-align: center;
 }
-.text-left {
-  text-align: left;
+.text-wrap {
+  text-wrap: wrap;
 }
-.transition-all {
-  transition-property: all;
-  transition-timing-function: var(--tw-ease, ease);
-  transition-duration: var(--tw-duration, 0s);
+.lowercase {
+  text-transform: lowercase;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+.italic {
+  font-style: italic;
+}
+.line-through {
+  text-decoration-line: line-through;
+}
+.overline {
+  text-decoration-line: overline;
+}
+.underline {
+  text-decoration-line: underline;
+}
+.filter {
+  filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
 }
 .transition-transform {
   transition-property: transform, translate, scale, rotate;
   transition-timing-function: var(--tw-ease, ease);
   transition-duration: var(--tw-duration, 0s);
-}
-.duration-300 {
-  --tw-duration: 300ms;
-  transition-duration: 300ms;
 }
 .hover\:underline {
   &:hover {
@@ -175,7 +173,56 @@
   inherits: false;
   initial-value: solid;
 }
-@property --tw-duration {
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
   syntax: "*";
   inherits: false;
 }
@@ -191,7 +238,19 @@
       --tw-skew-x: initial;
       --tw-skew-y: initial;
       --tw-border-style: solid;
-      --tw-duration: initial;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
     }
   }
 }

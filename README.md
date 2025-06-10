@@ -1,6 +1,5 @@
 # Causal Graph Dashboard
 
-This project visualises causal relationships in Iran's electricity sector. The application is completely static and can be served by any web server.
 
 ## Project Structure
 
@@ -73,9 +72,7 @@ npm test          # run Jest tests
 npm run build:css # compile Tailwind CSS
 ```
 
-### Release
 
-Automatic releases are handled by `semantic-release` using `npm run release`.
 
 ## Testing
 
