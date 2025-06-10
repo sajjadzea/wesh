@@ -153,6 +153,20 @@ function initCausalGraph(dataPath) {
           }
         }
         sidebar.classList.remove('translate-x-full');
+
+        // highlight connected edges and fade others
+        var id = d.id;
+        var connectedEdges = cy.edges('[source = "' + id + '"]').union(cy.edges('[target = "' + id + '"]'));
+        cy.edges().removeClass('highlight faded');
+        connectedEdges.addClass('highlight');
+        cy.edges().not(connectedEdges).addClass('faded');
+      });
+
+      // clear highlights when tapping on empty space
+      cy.on('tap', function(evt) {
+        if (evt.target === cy) {
+          cy.edges().removeClass('highlight faded');
+        }
       });
     })
     .catch(function(err) {
