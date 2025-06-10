@@ -1,6 +1,7 @@
 # Causal Graph Dashboard
 
 
+
 ## Project Structure
 
 ```
@@ -78,6 +79,4 @@ npm run build:css # compile Tailwind CSS
 
 Jest tests live in `test/`. Run them with:
 
-```bash
-npm test
-```
+
