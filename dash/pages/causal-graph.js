@@ -1,3 +1,14 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const containerCheck = document.getElementById('cy');
+  if (!containerCheck) {
+    console.error('Container #cy not found');
+    return;
+  }
+  initCausalGraph('data/causal-power-imbalance.json').then(cy => {
+    window.cyInstance = cy;
+  });
+});
+
 function initCausalGraph(dataPath) {
   return new Promise(function(resolve, reject) {
     const container = document.getElementById('cy');
@@ -98,9 +109,16 @@ function initCausalGraph(dataPath) {
         layout: { name: 'cose' }
       });
 
-      console.log('Nodes:', (causalData.nodes || []).length,
-                  'Edges:', (causalData.edges || []).length);
+      console.log('Loaded nodes:', (causalData.nodes || []).length,
+                  'edges:', (causalData.edges || []).length);
+      console.log('Before add:', cy.elements().length);
       cy.add([...(causalData.nodes || []), ...(causalData.edges || [])]);
+      console.log('After add:', cy.elements().length);
+      cy.style().selector('edge').style({
+        'line-color': '#555',
+        'width': 2,
+        'target-arrow-shape': 'triangle'
+      }).update();
       cy.layout({ name: 'cose' }).run();
       cy.resize();
       cy.fit();
@@ -273,16 +291,3 @@ function addDataToGraph(cy, data) {
 }
 
 window.addDataToGraph = addDataToGraph;
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const cyContainer = document.getElementById("cy");
-  if (!cyContainer) {
-    console.warn("Container #cy not found—skipping graph init");
-  } else {
-    initCausalGraph("data/causal-power-imbalance.json").then(cy => {
-      window.cyInstance = cy;
-    });
-  }
-});
