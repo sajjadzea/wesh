@@ -4,6 +4,9 @@ function initCausalGraph(dataPath) {
     console.error('Container element with id "cy" not found');
     return;
   }
+  const sliderContainer = document.getElementById('time-slider-container');
+  const slider = document.getElementById('time-slider');
+  const sliderLabel = document.getElementById('time-label');
 
   const sidebar = document.getElementById('node-info-sidebar');
   const titleEl = document.getElementById('node-info-title');
@@ -28,7 +31,7 @@ function initCausalGraph(dataPath) {
       // Log the raw data to verify it loaded correctly
       console.log('Fetched graph data:', causalData);
       console.log('Edges array from fetch:', causalData.edges);
-      const cy = cytoscape({
+      cy = cytoscape({
         container: container,
         elements: [],
         style: [
@@ -38,7 +41,10 @@ function initCausalGraph(dataPath) {
               label: 'data(label)',
               'background-color': '#007bff',
               width: 50,
-              height: 50
+              height: 50,
+              opacity: 1,
+              'transition-property': 'opacity',
+              'transition-duration': '300ms'
             }
           },
           {
@@ -48,7 +54,10 @@ function initCausalGraph(dataPath) {
               'line-color': 'red',
               'target-arrow-color': 'red',
               'target-arrow-shape': 'triangle',
-              'curve-style': 'bezier'
+              'curve-style': 'bezier',
+              opacity: 1,
+              'transition-property': 'opacity',
+              'transition-duration': '300ms'
             }
           }
         ],
@@ -80,6 +89,43 @@ function initCausalGraph(dataPath) {
       if (toggleB) toggleB.addEventListener('change', updateEdgeVisibility);
 
       updateEdgeVisibility();
+
+      var timestamps = [];
+      (causalData.nodes || []).forEach(function(n){
+        var t = n.data && n.data.timestamp;
+        if (typeof t === 'number') timestamps.push(t);
+      });
+      (causalData.edges || []).forEach(function(e){
+        var t = e.data && e.data.timestamp;
+        if (typeof t === 'number') timestamps.push(t);
+      });
+
+      if (timestamps.length && slider && sliderContainer && sliderLabel) {
+        timestamps.sort(function(a,b){return a-b;});
+        slider.min = timestamps[0];
+        slider.max = timestamps[timestamps.length - 1];
+        slider.value = slider.max;
+        sliderContainer.classList.remove('hidden');
+        sliderLabel.textContent = formatFaDate(parseInt(slider.value, 10));
+
+        function updateTime() {
+          var val = parseInt(slider.value, 10);
+          sliderLabel.textContent = formatFaDate(val);
+          cy.batch(function(){
+            cy.nodes().forEach(function(n){
+              var ts = n.data('timestamp');
+              n.style('opacity', ts == null || ts <= val ? 1 : 0);
+            });
+            cy.edges().forEach(function(e){
+              var ts = e.data('timestamp');
+              e.style('opacity', ts == null || ts <= val ? 1 : 0);
+            });
+          });
+        }
+        slider.addEventListener('input', updateTime);
+        // initial filter
+        updateTime();
+      }
 
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
@@ -155,3 +201,11 @@ function addDataToGraph(cy, data) {
 }
 
 window.addDataToGraph = addDataToGraph;
+
+function formatFaDate(ts) {
+  try {
+    return new Date(ts).toLocaleDateString('fa-IR');
+  } catch (e) {
+    return ts;
+  }
+}
