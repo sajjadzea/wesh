@@ -6,7 +6,6 @@
     <title>تحلیل تعاملی بحران عدم تعادل برق ایران</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -352,21 +351,21 @@
         });
     </script>
 
+    <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
     <script src="./dash/pages/causal-graph.js"></script>
     <script>
-      // cache busting query param ensures the latest JSON is loaded
-      initCausalGraph("data/causal-power-imbalance.json?v=" + Date.now());
-
-      const helpBtn = document.getElementById('graph-help-btn');
-      const helpModal = document.getElementById('graph-help-modal');
-      const helpClose = document.getElementById('graph-help-close');
-      if (helpBtn && helpModal && helpClose) {
-        helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
-        helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
-        helpModal.addEventListener('click', (e) => {
-          if (e.target === helpModal) helpModal.classList.add('hidden');
-        });
-      }
+      document.addEventListener('DOMContentLoaded', () => {
+        const helpBtn = document.getElementById('graph-help-btn');
+        const helpModal = document.getElementById('graph-help-modal');
+        const helpClose = document.getElementById('graph-help-close');
+        if (helpBtn && helpModal && helpClose) {
+          helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
+          helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
+          helpModal.addEventListener('click', (e) => {
+            if (e.target === helpModal) helpModal.classList.add('hidden');
+          });
+        }
+      });
     </script>
 </body>
 </html>

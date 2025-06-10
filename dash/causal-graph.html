@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>نمودار علّی عرضه و تقاضای برق</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
     <link rel="icon" href="data:,">
     <style>
       #cy { position: relative; z-index: 0; }
@@ -81,36 +80,21 @@
             </div>
         </div>
     </div>
+    <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
     <script src="pages/causal-graph.js"></script>
     <script>
-  initCausalGraph('../data/causal-power-imbalance.json').then(cy => {
-    // Temporary edge style test
-    cy.style()
-      .selector('edge')
-      .style({
-        'line-color': 'red',
-        'width': 4,
-        'target-arrow-shape': 'triangle'
-      })
-      .update();
-    document.getElementById('add-data-btn')
-      .addEventListener('click', () => {
-        fetch('../data/new-elements.json')
-          .then(res => res.json())
-          .then(data => addDataToGraph(cy, data));
+      document.addEventListener('DOMContentLoaded', () => {
+        const helpBtn = document.getElementById('graph-help-btn');
+        const helpModal = document.getElementById('graph-help-modal');
+        const helpClose = document.getElementById('graph-help-close');
+        if (helpBtn && helpModal && helpClose) {
+          helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
+          helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
+          helpModal.addEventListener('click', (e) => {
+            if (e.target === helpModal) helpModal.classList.add('hidden');
+          });
+        }
       });
-  });
-
-  const helpBtn = document.getElementById('graph-help-btn');
-  const helpModal = document.getElementById('graph-help-modal');
-  const helpClose = document.getElementById('graph-help-close');
-  if (helpBtn && helpModal && helpClose) {
-    helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
-    helpClose.addEventListener('click', () => helpModal.classList.add('hidden'));
-    helpModal.addEventListener('click', (e) => {
-      if (e.target === helpModal) helpModal.classList.add('hidden');
-    });
-  }
-</script>
+    </script>
 </body>
 </html>
