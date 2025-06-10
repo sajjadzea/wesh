@@ -45,10 +45,22 @@ function initCausalGraph(dataPath) {
             selector: 'edge',
             style: {
               width: 4,
-              'line-color': 'red',
-              'target-arrow-color': 'red',
               'target-arrow-shape': 'triangle',
               'curve-style': 'bezier'
+            }
+          },
+          {
+            selector: 'edge[type="positive"]',
+            style: {
+              'line-color': '#16a34a',
+              'target-arrow-color': '#16a34a'
+            }
+          },
+          {
+            selector: 'edge[type="negative"]',
+            style: {
+              'line-color': '#dc2626',
+              'target-arrow-color': '#dc2626'
             }
           }
         ],
@@ -122,15 +134,6 @@ function addDataToGraph(cy, data) {
   if (newElements.length) {
     cy.add(newElements);
     console.log('Edges count after add:', cy.edges().length);
-    // temporarily highlight edges to debug visibility
-    cy.style()
-      .selector('edge')
-      .style({
-        'line-color': 'red',
-        width: 4,
-        'target-arrow-shape': 'triangle'
-      })
-      .update();
     cy.layout({ name: 'cose' }).run();
   }
 }
