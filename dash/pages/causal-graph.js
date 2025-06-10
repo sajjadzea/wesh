@@ -23,6 +23,8 @@ function initCausalGraph(dataPath) {
   if (closeBtn && sidebar) {
     closeBtn.addEventListener('click', function() {
       sidebar.classList.add('translate-x-full');
+      if (cy) cy.edges().removeClass('highlight faded');
+      activeNode = null;
     });
   }
 
@@ -39,6 +41,7 @@ function initCausalGraph(dataPath) {
 
   const loadingEl = document.createElement('div');
   let cy;
+  let activeNode = null;
   loadingEl.textContent = 'در حال بارگذاری...';
   loadingEl.className = 'text-center my-4';
   container.appendChild(loadingEl);
@@ -75,6 +78,20 @@ function initCausalGraph(dataPath) {
               'target-arrow-shape': 'triangle',
               'target-arrow-color': 'data(type)',
               width: 3
+            }
+          },
+          {
+            selector: 'edge.highlight',
+            style: {
+              'line-color': '#f59e0b',
+              'target-arrow-color': '#f59e0b',
+              width: 6
+            }
+          },
+          {
+            selector: 'edge.faded',
+            style: {
+              'opacity': 0.3
             }
           }
         ],
@@ -132,7 +149,14 @@ function initCausalGraph(dataPath) {
 
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
-        var d = evt.target.data();
+        var node = evt.target;
+        var d = node.data();
+        if (activeNode && activeNode.id() === node.id()) {
+          cy.edges().removeClass('highlight faded');
+          activeNode = null;
+          return;
+        }
+        activeNode = node;
         if (titleEl) titleEl.textContent = d.label || '';
         if (descEl) descEl.textContent = d.description || '';
         if (resEl) {
@@ -193,6 +217,7 @@ function initCausalGraph(dataPath) {
       cy.on('tap', function(evt) {
         if (evt.target === cy) {
           cy.edges().removeClass('highlight faded');
+          activeNode = null;
         }
       });
 
