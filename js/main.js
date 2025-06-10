@@ -1,4 +1,3 @@
-import cytoscape from 'https://unpkg.com/cytoscape@3.32.0/dist/cytoscape.esm.min.js';
 import Chart from 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
 
 async function fetchJSON(path) {
