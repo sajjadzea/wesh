@@ -44,6 +44,13 @@ function initCausalGraph(dataPath) {
       console.log('Fetched graph data:', causalData);
       console.log('Edges array from fetch:', causalData.edges);
       console.log('JSON Edges:', causalData.edges);
+
+      // Map relation type to color while preserving the original sign
+      (causalData.edges || []).forEach(function(e) {
+        var sign = e.data.type; // 'positive' or 'negative'
+        e.data.sign = sign;
+        e.data.type = sign === 'positive' ? 'green' : 'red';
+      });
       cy = cytoscape({
         container: container,
         elements: [],
@@ -63,26 +70,10 @@ function initCausalGraph(dataPath) {
           {
             selector: 'edge',
             style: {
-              width: 4,
+              'line-color': 'data(type)',
               'target-arrow-shape': 'triangle',
-              'curve-style': 'bezier',
-              opacity: 1,
-              'transition-property': 'opacity',
-              'transition-duration': '300ms'
-            }
-          },
-          {
-            selector: 'edge[type="positive"]',
-            style: {
-              'line-color': '#16a34a',
-              'target-arrow-color': '#16a34a'
-            }
-          },
-          {
-            selector: 'edge[type="negative"]',
-            style: {
-              'line-color': '#dc2626',
-              'target-arrow-color': '#dc2626'
+              'target-arrow-color': 'data(type)',
+              width: 3
             }
           }
         ],
@@ -106,7 +97,7 @@ function initCausalGraph(dataPath) {
 
       function updateEdgeVisibility() {
         cy.edges().forEach(function(edge) {
-          var loop = edge.data('loop') || (edge.data('type') === 'negative' ? 'B' : 'R');
+          var loop = edge.data('loop') || (edge.data('sign') === 'negative' ? 'B' : 'R');
           if ((loop === 'R' && toggleR && !toggleR.checked) || (loop === 'B' && toggleB && !toggleB.checked)) {
             edge.hide();
           } else {
@@ -161,7 +152,7 @@ function initCausalGraph(dataPath) {
           cy.edges().forEach(function(edge) {
             var data = edge.data();
             if (data.source === d.id || data.target === d.id) {
-              var l = data.loop || (data.type === 'negative' ? 'B' : 'R');
+              var l = data.loop || (data.sign === 'negative' ? 'B' : 'R');
               loopsSet.add(l);
             }
           });
@@ -239,6 +230,7 @@ function addDataToGraph(cy, data) {
     cy.add(newElements);
     console.log('Edges count after add:', cy.edges().length);
     cy.layout({ name: 'cose' }).run();
+    if (cy.forceRender) cy.forceRender();
   }
 }
 
