@@ -58,7 +58,10 @@ function initCausalGraph(dataPath) {
   container.appendChild(loadingEl);
 
   fetch(dataPath)
-    .then(function(res) { return res.json(); })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Fetch failed: ' + res.status + ' ' + res.statusText);
+      return res.json();
+    })
     .then(function(causalData) {
       // Map relation type to color while preserving the original sign
       (causalData.edges || []).forEach(function(e) {
@@ -245,9 +248,7 @@ function initCausalGraph(dataPath) {
       resolve(cy);
     })
     .catch(function(err) {
-      console.error('Error loading graph data', err);
-      container.innerHTML = '<div class="text-red-600">خطا در بارگذاری داده‌های نمودار</div>';
-      reject(err);
+      console.error('Error loading graph data:', err);
     })
     .finally(function() {
       loadingEl.remove();
