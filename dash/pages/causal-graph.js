@@ -46,23 +46,12 @@ function initCausalGraph(dataPath) {
             selector: 'edge',
             style: {
               width: 4,
-              'line-color': 'red',
-              'target-arrow-color': 'red',
               'target-arrow-shape': 'triangle',
               'curve-style': 'bezier'
             }
           },
           {
-            selector: 'edge[loopLabel]',
-            style: {
-              label: 'data(loopLabel)',
-              'font-size': '10px',
-              'text-background-color': '#fff',
-              'text-background-opacity': 1,
-              'text-border-color': '#000',
-              'text-border-width': 1,
-              'text-border-opacity': 1,
-              'text-margin-y': -10
+
             }
           }
         ],
@@ -77,6 +66,25 @@ function initCausalGraph(dataPath) {
 
       // log element counts to check against the JSON file
       console.log('Graph now has', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
+
+      const toggleR = document.getElementById('toggle-reinforcing');
+      const toggleB = document.getElementById('toggle-balancing');
+
+      function updateEdgeVisibility() {
+        cy.edges().forEach(function(edge) {
+          var loop = edge.data('loop') || (edge.data('type') === 'negative' ? 'B' : 'R');
+          if ((loop === 'R' && toggleR && !toggleR.checked) || (loop === 'B' && toggleB && !toggleB.checked)) {
+            edge.hide();
+          } else {
+            edge.show();
+          }
+        });
+      }
+
+      if (toggleR) toggleR.addEventListener('change', updateEdgeVisibility);
+      if (toggleB) toggleB.addEventListener('change', updateEdgeVisibility);
+
+      updateEdgeVisibility();
 
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
@@ -138,15 +146,6 @@ function addDataToGraph(cy, data) {
   if (newElements.length) {
     cy.add(newElements);
     console.log('Edges count after add:', cy.edges().length);
-    // temporarily highlight edges to debug visibility
-    cy.style()
-      .selector('edge')
-      .style({
-        'line-color': 'red',
-        width: 4,
-        'target-arrow-shape': 'triangle'
-      })
-      .update();
     cy.layout({ name: 'cose' }).run();
   }
 }
