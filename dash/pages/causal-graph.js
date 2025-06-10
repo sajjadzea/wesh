@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Container #cy not found');
     return;
   }
-  initCausalGraph('/wesh/data/causal-power-imbalance.json').then(cy => {
+  // Use a path relative to the server root so the file loads correctly
+  // regardless of where the project directory is served from.
+  initCausalGraph('/data/causal-power-imbalance.json').then(cy => {
     window.cyInstance = cy;
   });
 });
