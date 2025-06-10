@@ -50,6 +50,7 @@ function initCausalGraph(dataPath) {
     .then(function(causalData) {
       // Log the raw data to verify it loaded correctly
       console.log('Fetched graph data:', causalData);
+      console.log('Edges array from fetch:', causalData.edges);
       const cy = cytoscape({
         container: container,
         elements: [],
@@ -67,8 +68,8 @@ function initCausalGraph(dataPath) {
             selector: 'edge',
             style: {
               width: 4,
-              'line-color': "mapData(type, 'positive', 'green', 'negative', 'red', 'neutral', 'gray')",
-              'target-arrow-color': "mapData(type, 'positive', 'green', 'negative', 'red', 'neutral', 'gray')",
+              'line-color': 'red',
+              'target-arrow-color': 'red',
               'target-arrow-shape': 'triangle',
               'curve-style': 'bezier'
             }
@@ -141,6 +142,7 @@ function addDataToGraph(cy, data) {
 
   if (newElements.length) {
     cy.add(newElements);
+    console.log('Edges count after add:', cy.edges().length);
     cy.layout({ name: 'cose' }).run();
   }
 }
