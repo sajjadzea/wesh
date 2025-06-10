@@ -74,6 +74,25 @@ function initCausalGraph(dataPath) {
       // log element counts to check against the JSON file
       console.log('Graph now has', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
 
+      const toggleR = document.getElementById('toggle-reinforcing');
+      const toggleB = document.getElementById('toggle-balancing');
+
+      function updateEdgeVisibility() {
+        cy.edges().forEach(function(edge) {
+          var loop = edge.data('loop') || (edge.data('type') === 'negative' ? 'B' : 'R');
+          if ((loop === 'R' && toggleR && !toggleR.checked) || (loop === 'B' && toggleB && !toggleB.checked)) {
+            edge.hide();
+          } else {
+            edge.show();
+          }
+        });
+      }
+
+      if (toggleR) toggleR.addEventListener('change', updateEdgeVisibility);
+      if (toggleB) toggleB.addEventListener('change', updateEdgeVisibility);
+
+      updateEdgeVisibility();
+
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
         var d = evt.target.data();
