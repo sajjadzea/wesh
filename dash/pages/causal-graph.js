@@ -4,18 +4,32 @@ function initCausalGraph(dataPath) {
     console.error('Container element with id "cy" not found');
     return;
   }
+  const sliderContainer = document.getElementById('time-slider-container');
+  const slider = document.getElementById('time-slider');
+  const sliderLabel = document.getElementById('time-label');
 
   const sidebar = document.getElementById('node-info-sidebar');
   const titleEl = document.getElementById('node-info-title');
   const descEl = document.getElementById('node-info-desc');
   const resEl = document.getElementById('node-info-resources');
-  const loopListEl = document.getElementById('loop-list');
+
   const closeBtn = document.getElementById('node-info-close');
   if (closeBtn && sidebar) {
     closeBtn.addEventListener('click', function() {
       sidebar.classList.add('translate-x-full');
     });
   }
+
+  tabButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      tabButtons.forEach(function(b) { b.classList.replace('active-tab', 'inactive-tab'); });
+      tabContents.forEach(function(c) { c.classList.add('hidden'); });
+      btn.classList.replace('inactive-tab', 'active-tab');
+      var tabId = 'tab-' + btn.getAttribute('data-tab');
+      var content = document.getElementById(tabId);
+      if (content) content.classList.remove('hidden');
+    });
+  });
 
   const loadingEl = document.createElement('div');
   let cy;
@@ -29,7 +43,7 @@ function initCausalGraph(dataPath) {
       // Log the raw data to verify it loaded correctly
       console.log('Fetched graph data:', causalData);
       console.log('Edges array from fetch:', causalData.edges);
-      const cy = cytoscape({
+      cy = cytoscape({
         container: container,
         elements: [],
         style: [
@@ -39,7 +53,10 @@ function initCausalGraph(dataPath) {
               label: 'data(label)',
               'background-color': '#007bff',
               width: 50,
-              height: 50
+              height: 50,
+              opacity: 1,
+              'transition-property': 'opacity',
+              'transition-duration': '300ms'
             }
           },
           {
@@ -47,7 +64,10 @@ function initCausalGraph(dataPath) {
             style: {
               width: 4,
               'target-arrow-shape': 'triangle',
-              'curve-style': 'bezier'
+              'curve-style': 'bezier',
+              opacity: 1,
+              'transition-property': 'opacity',
+              'transition-duration': '300ms'
             }
           },
           {
@@ -69,6 +89,9 @@ function initCausalGraph(dataPath) {
 
       const toggleR = document.getElementById('toggle-reinforcing');
       const toggleB = document.getElementById('toggle-balancing');
+      const zoomInBtn = document.getElementById('zoom-in');
+      const zoomOutBtn = document.getElementById('zoom-out');
+      const zoomResetBtn = document.getElementById('zoom-reset');
 
       function updateEdgeVisibility() {
         cy.edges().forEach(function(edge) {
@@ -84,7 +107,24 @@ function initCausalGraph(dataPath) {
       if (toggleR) toggleR.addEventListener('change', updateEdgeVisibility);
       if (toggleB) toggleB.addEventListener('change', updateEdgeVisibility);
 
+      if (zoomInBtn)
+        zoomInBtn.addEventListener('click', function () {
+          cy.zoom(cy.zoom() * 1.2);
+        });
+
+      if (zoomOutBtn)
+        zoomOutBtn.addEventListener('click', function () {
+          cy.zoom(cy.zoom() * 0.8);
+        });
+
+      if (zoomResetBtn)
+        zoomResetBtn.addEventListener('click', function () {
+          cy.fit();
+        });
+
       updateEdgeVisibility();
+
+      }
 
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
@@ -106,7 +146,50 @@ function initCausalGraph(dataPath) {
             });
           }
         }
+        if (loopsEl && cy) {
+          loopsEl.innerHTML = '';
+          var loopsSet = new Set();
+          cy.edges().forEach(function(edge) {
+            var data = edge.data();
+            if (data.source === d.id || data.target === d.id) {
+              var l = data.loop || (data.type === 'negative' ? 'B' : 'R');
+              loopsSet.add(l);
+            }
+          });
+          if (loopsSet.size) {
+            loopsSet.forEach(function(l) {
+              var li = document.createElement('li');
+              li.textContent = l === 'R' ? 'حلقه تقویتی' : 'حلقه متعادل‌کننده';
+              loopsEl.appendChild(li);
+            });
+          } else {
+            var li = document.createElement('li');
+            li.textContent = 'حلقه مرتبطی یافت نشد';
+            loopsEl.appendChild(li);
+          }
+        }
+        // reset tabs to description on each open
+        tabButtons.forEach(function(b) { b.classList.replace('active-tab', 'inactive-tab'); });
+        tabContents.forEach(function(c) { c.classList.add('hidden'); });
+        var firstTab = document.querySelector('#node-info-tabs [data-tab="desc"]');
+        if (firstTab) firstTab.classList.replace('inactive-tab', 'active-tab');
+        var firstContent = document.getElementById('tab-desc');
+        if (firstContent) firstContent.classList.remove('hidden');
         sidebar.classList.remove('translate-x-full');
+
+        // highlight connected edges and fade others
+        var id = d.id;
+        var connectedEdges = cy.edges('[source = "' + id + '"]').union(cy.edges('[target = "' + id + '"]'));
+        cy.edges().removeClass('highlight faded');
+        connectedEdges.addClass('highlight');
+        cy.edges().not(connectedEdges).addClass('faded');
+      });
+
+      // clear highlights when tapping on empty space
+      cy.on('tap', function(evt) {
+        if (evt.target === cy) {
+          cy.edges().removeClass('highlight faded');
+        }
       });
     })
     .catch(function(err) {
@@ -152,75 +235,5 @@ function addDataToGraph(cy, data) {
 
 window.addDataToGraph = addDataToGraph;
 
-function labelLoops(cy, listEl) {
-  if (!cy) return;
-  if (listEl) listEl.innerHTML = '';
 
-  var loops = findLoops(cy);
-  var r = 0, b = 0;
-
-  loops.forEach(function(loop) {
-    var neg = loop.filter(function(e){ return e.data('type') === 'negative'; }).length;
-    var isRe = neg % 2 === 0;
-    var label = (isRe ? 'R' : 'B') + (isRe ? ++r : ++b);
-    var firstEdge = loop[0];
-    firstEdge.data('loopLabel', label);
-
-    if (listEl) {
-      var li = document.createElement('li');
-      li.textContent = label;
-      listEl.appendChild(li);
-    }
-  });
-
-  // simple tooltip on hover
-  cy.on('mouseover', 'edge[loopLabel]', function(evt){
-    var t = document.createElement('div');
-    t.className = 'loop-tooltip';
-    t.textContent = evt.target.data('loopLabel');
-    document.body.appendChild(t);
-
-    var update = function(){
-      var pos = evt.target.midpoint();
-      var pan = cy.pan();
-      var zoom = cy.zoom();
-      t.style.left = (pos.x * zoom + pan.x) + 'px';
-      t.style.top = (pos.y * zoom + pan.y - 20) + 'px';
-    };
-    update();
-    evt.target.on('mousemove', update);
-    evt.target.one('mouseout', function(){
-      evt.target.removeListener('mousemove', update);
-      t.remove();
-    });
-  });
-}
-
-function findLoops(cy){
-  var cycles = [];
-  var seen = new Set();
-
-  function dfs(start, node, path, visited){
-    visited.add(node.id());
-    node.outgoers('edge').forEach(function(edge){
-      var target = edge.target();
-      if(target.id() === start.id()){
-        var cycle = path.concat([edge]);
-        var key = cycle.map(function(e){ return e.id(); }).sort().join('-');
-        if(!seen.has(key)){
-          seen.add(key);
-          cycles.push(cycle);
-        }
-      } else if(!visited.has(target.id())) {
-        dfs(start, target, path.concat([edge]), visited);
-      }
-    });
-    visited.delete(node.id());
-  }
-
-  cy.nodes().forEach(function(n){
-    dfs(n, n, [], new Set());
-  });
-
-  return cycles;
 }

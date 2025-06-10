@@ -10,7 +10,7 @@
 <body class="p-4">
     <div class="relative" style="width:100%; height:600px">
         <div id="cy" class="absolute inset-0"></div>
-        <button id="graph-help-btn" class="absolute top-2 right-2 bg-teal-600 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center">?</button>
+
         <div id="cy-legend" class="absolute bottom-2 left-2 bg-white/80 backdrop-blur-sm rounded-md shadow px-3 py-2 text-xs">
             <div class="flex items-center mb-1">
                 <span class="text-xs">رابطه مثبت (تقویتی)</span>
@@ -21,6 +21,11 @@
                 <span class="w-3 h-3 rounded-full bg-red-600 mr-2 inline-block"></span>
             </div>
         </div>
+        <div id="cy-controls" class="absolute top-2 right-2 flex gap-1">
+            <button id="zoom-in" class="bg-white px-2 py-1 rounded shadow">+</button>
+            <button id="zoom-out" class="bg-white px-2 py-1 rounded shadow">−</button>
+            <button id="reset-zoom" class="bg-white px-2 py-1 rounded shadow">↺</button>
+        </div>
     </div>
     <button id="add-data-btn" class="mt-2 px-4 py-1 bg-blue-600 text-white rounded">افزودن داده</button>
     <!-- Sidebar for node details -->
@@ -29,8 +34,22 @@
             <h2 id="node-info-title" class="font-bold text-lg"></h2>
             <button id="node-info-close" class="text-slate-500 hover:text-slate-700">&times;</button>
         </div>
-        <p id="node-info-desc" class="text-sm text-slate-700 mb-4"></p>
-        <ul id="node-info-resources" class="list-disc pr-5 space-y-2 text-sm"></ul>
+        <div>
+            <nav id="node-info-tabs" class="flex mb-4 border-b">
+                <button data-tab="desc" class="tab-button px-3 py-1 border-b-2 active-tab">توضیحات</button>
+                <button data-tab="resources" class="tab-button px-3 py-1 border-b-2 inactive-tab">منابع</button>
+                <button data-tab="loops" class="tab-button px-3 py-1 border-b-2 inactive-tab">حلقه‌های مرتبط</button>
+            </nav>
+            <div id="tab-desc" class="tab-content">
+                <p id="node-info-desc" class="text-sm text-slate-700 mb-4"></p>
+            </div>
+            <div id="tab-resources" class="tab-content hidden">
+                <ul id="node-info-resources" class="list-disc pr-5 space-y-2 text-sm"></ul>
+            </div>
+            <div id="tab-loops" class="tab-content hidden">
+                <ul id="node-info-loops" class="list-disc pr-5 space-y-2 text-sm"></ul>
+            </div>
+        </div>
     </div>
 
     <div id="graph-help-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
