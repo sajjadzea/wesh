@@ -4,11 +4,15 @@ function initCausalGraph(dataPath) {
     console.error('Container element with id "cy" not found');
     return;
   }
+  const sliderContainer = document.getElementById('time-slider-container');
+  const slider = document.getElementById('time-slider');
+  const sliderLabel = document.getElementById('time-label');
 
   const sidebar = document.getElementById('node-info-sidebar');
   const titleEl = document.getElementById('node-info-title');
   const descEl = document.getElementById('node-info-desc');
   const resEl = document.getElementById('node-info-resources');
+  const loopListEl = document.getElementById('loop-list');
   const closeBtn = document.getElementById('node-info-close');
   if (closeBtn && sidebar) {
     closeBtn.addEventListener('click', function() {
@@ -28,7 +32,7 @@ function initCausalGraph(dataPath) {
       // Log the raw data to verify it loaded correctly
       console.log('Fetched graph data:', causalData);
       console.log('Edges array from fetch:', causalData.edges);
-      const cy = cytoscape({
+      cy = cytoscape({
         container: container,
         elements: [],
         style: [
@@ -38,7 +42,10 @@ function initCausalGraph(dataPath) {
               label: 'data(label)',
               'background-color': '#007bff',
               width: 50,
-              height: 50
+              height: 50,
+              opacity: 1,
+              'transition-property': 'opacity',
+              'transition-duration': '300ms'
             }
           },
           {
@@ -46,33 +53,14 @@ function initCausalGraph(dataPath) {
             style: {
               width: 4,
               'target-arrow-shape': 'triangle',
-              'curve-style': 'bezier'
+              'curve-style': 'bezier',
+              opacity: 1,
+              'transition-property': 'opacity',
+              'transition-duration': '300ms'
             }
           },
           {
-            selector: 'edge.highlight',
-            style: {
-              width: 6
-            }
-          },
-          {
-            selector: 'edge.faded',
-            style: {
-              opacity: 0.1
-            }
-          },
-          {
-            selector: 'edge[type="positive"]',
-            style: {
-              'line-color': '#16a34a',
-              'target-arrow-color': '#16a34a'
-            }
-          },
-          {
-            selector: 'edge[type="negative"]',
-            style: {
-              'line-color': '#dc2626',
-              'target-arrow-color': '#dc2626'
+
             }
           }
         ],
@@ -82,6 +70,8 @@ function initCausalGraph(dataPath) {
       addDataToGraph(cy, causalData);
       // log the edge count right after adding data
       console.log('Edges after addDataToGraph:', cy.edges().length);
+
+      labelLoops(cy, loopListEl);
 
       // log element counts to check against the JSON file
       console.log('Graph now has', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
@@ -104,6 +94,43 @@ function initCausalGraph(dataPath) {
       if (toggleB) toggleB.addEventListener('change', updateEdgeVisibility);
 
       updateEdgeVisibility();
+
+      var timestamps = [];
+      (causalData.nodes || []).forEach(function(n){
+        var t = n.data && n.data.timestamp;
+        if (typeof t === 'number') timestamps.push(t);
+      });
+      (causalData.edges || []).forEach(function(e){
+        var t = e.data && e.data.timestamp;
+        if (typeof t === 'number') timestamps.push(t);
+      });
+
+      if (timestamps.length && slider && sliderContainer && sliderLabel) {
+        timestamps.sort(function(a,b){return a-b;});
+        slider.min = timestamps[0];
+        slider.max = timestamps[timestamps.length - 1];
+        slider.value = slider.max;
+        sliderContainer.classList.remove('hidden');
+        sliderLabel.textContent = formatFaDate(parseInt(slider.value, 10));
+
+        function updateTime() {
+          var val = parseInt(slider.value, 10);
+          sliderLabel.textContent = formatFaDate(val);
+          cy.batch(function(){
+            cy.nodes().forEach(function(n){
+              var ts = n.data('timestamp');
+              n.style('opacity', ts == null || ts <= val ? 1 : 0);
+            });
+            cy.edges().forEach(function(e){
+              var ts = e.data('timestamp');
+              e.style('opacity', ts == null || ts <= val ? 1 : 0);
+            });
+          });
+        }
+        slider.addEventListener('input', updateTime);
+        // initial filter
+        updateTime();
+      }
 
       cy.on('tap', 'node', function(evt) {
         if (!sidebar) return;
@@ -184,3 +211,6 @@ function addDataToGraph(cy, data) {
 }
 
 window.addDataToGraph = addDataToGraph;
+
+
+}
