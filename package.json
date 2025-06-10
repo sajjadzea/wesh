@@ -6,7 +6,7 @@
   "scripts": {
 
     "test": "jest",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --write 'src/**/*.{js,ts,json,md}'",
     "release": "semantic-release",
     "prepare": "husky install",

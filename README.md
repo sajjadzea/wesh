@@ -72,6 +72,16 @@ npm run format    # format with Prettier
 npm test          # run Jest tests
 npm run build:css # compile Tailwind CSS
 ```
+### Linting
+
+Run ESLint using:
+
+```bash
+npm run lint
+```
+
+The configuration lives in `eslint.config.js` and ignores generated assets and example files.
+
 
 
 
