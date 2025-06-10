@@ -85,7 +85,10 @@
     <script src="pages/causal-graph.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        initCausalGraph('/wesh/data/causal-power-imbalance.json');
+        // Load data from the repository root rather than a hard coded
+        // "/wesh" sub-path to avoid 404 errors when the project is served
+        // from its own root directory.
+        initCausalGraph('/data/causal-power-imbalance.json');
       });
     </script>
 
