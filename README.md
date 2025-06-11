@@ -110,3 +110,18 @@ Jest tests live in `test/`. Run them with:
 ```bash
 npm test
 ```
+
+### Running E2E Tests in CI
+
+- With Electron headless (no X server required):
+  ```bash
+  npm run e2e
+  ```
+- If you need Chrome:
+  ```bash
+  npm run e2e:chrome
+  ```
+- Still see Xvfb errors? Ensure `scripts/install-chrome.sh` ran or install the package manually:
+  ```bash
+  sudo apt-get install -y xvfb
+  ```
