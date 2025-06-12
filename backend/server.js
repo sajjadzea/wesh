@@ -2,6 +2,7 @@ import express from 'express';
 import compression from 'compression';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import helmet from 'helmet';
 import apiRoutes from './routes/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,25 +13,35 @@ const app = express();
 console.debug('Initializing Express server');
 
 app.use(compression());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: ["'self'", 'https://jsonplaceholder.typicode.com'],
+      },
+    },
+  })
+);
 // Troubleshoot: if compression errors, check middleware order
 
-const buildDir = path.join(__dirname, 'build');
+const publicDir = path.join(__dirname, '..', 'public');
 app.use(
-  express.static(buildDir, {
+  express.static(publicDir, {
     maxAge: '30d',
     etag: false,
   })
 );
-console.debug('Serving static files from build/');
-// Troubleshoot: if static assets 404, check build path and deployment pipeline
+console.debug('Serving static files from public/');
+// Troubleshoot: if static assets 404, check public path and deployment pipeline
 
 app.use('/api', apiRoutes);
 
 app.get('*', (req, res) => {
   console.debug('Fallback to index.html for', req.originalUrl);
-  res.sendFile(path.join(buildDir, 'index.html'));
+  res.sendFile(path.join(publicDir, 'index.html'));
 });
-// Troubleshoot: if index.html not found, ensure build/index.html exists
+// Troubleshoot: if index.html not found, ensure public/index.html exists
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, _next) => {
