@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>داشبورد مدیریت برق</title>
+  <link rel="stylesheet" href="assets/tailwind.css">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://jsonplaceholder.typicode.com;">
+</head>
+<body>
+  <section id="graph-section">
+    <div id="graph-container" class="graph"></div>
+  </section>
+  <section id="dashboard-section">
+    <select id="categoryFilter"></select>
+    <div id="dashboard-cards"></div>
+    <canvas id="chart1"></canvas>
+    <canvas id="chart2"></canvas>
+  </section>
+  <aside id="sidebar" class="sidebar"></aside>
+    <script src="js/libs/cytoscape.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
