@@ -105,7 +105,7 @@ If the site ever loads the repository `README.md` instead of `public/index.html`
 
 ## Testing
 
-Jest tests live in `test/`. Run them with:
+Jest tests live in `test/`. Install dependencies first and then run:
 
 ```bash
 npm test
