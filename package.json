@@ -21,7 +21,7 @@
     "canvas": "^3.1.0",
     "compression": "^1.8.0",
     "cytoscape": "^3.32.0",
-    "express": "^4.21.2",
+    "express": "^5.1.0",
     "jsdom": "^26.1.0",
     "helmet": "^8.1.0"
   },
